@@ -22,7 +22,7 @@ public class LevelManager : MonoBehaviour
     private void OnApplicationFocus(bool focus)
     {
         if(focus)
-            GenerateLevelFromFile(Application.dataPath + "/Resources/Level 1/level1.ini");
+            GenerateLevelFromFile(Application.dataPath + "/Resources/level_1/blocks.ini");
     }
 
     public void GenerateLevelFromFile(string p_levelFilePath)
