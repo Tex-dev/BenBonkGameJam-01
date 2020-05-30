@@ -22,11 +22,6 @@ public class LevelManager : Singleton<LevelManager>
     private Tilemap m_highlightMap;
 
     /// <summary>
-    /// Prevent the spawning of the pause menu on game launch.
-    /// </summary>
-    private bool m_DebounceFirstFocus = false;
-
-    /// <summary>
     /// GameObject to display on pause.
     /// </summary>
     [SerializeField]
@@ -56,21 +51,16 @@ public class LevelManager : Singleton<LevelManager>
     /// <param name="focus">Status of the focus. ON = true, OFF = false.</param>
     private void OnApplicationFocus(bool focus)
     {
-        // Prevents pause menu spawn on first frame of the game.
-        if (m_DebounceFirstFocus)
-        {
-            // The only purpose of this is to animate a little.
-            CoroutineManager.Delay(() => m_PauseMenu.SetActive(!focus), 0.1f);
-            CoroutineManager.Delay(() => m_PauseMenu.SetActive(focus), 0.15f);
-            CoroutineManager.Delay(() => m_PauseMenu.SetActive(!focus), 0.2f);
-        }
-        m_DebounceFirstFocus = true;
+        m_PauseMenu.SetActive(!focus);
 
         if (focus)
         {
+            PlayerManager.Play();
             GenerateLevelFromFile(Application.dataPath + $"/Resources/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
             FileManager.Instance.CloseFile();
         }
+        else
+            PlayerManager.Pause();
     }
 
     /// <summary>

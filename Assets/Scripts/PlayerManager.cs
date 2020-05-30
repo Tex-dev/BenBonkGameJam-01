@@ -40,35 +40,103 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private Animator m_animator = null;
 
-    // Start is called before the first frame update
-    private void Start()
+    /// <summary>
+    /// Is the game paused?
+    /// </summary>
+    private bool m_IsPaused = false;
+
+    /// <summary>
+    /// Is the game done starting.
+    /// </summary>
+    private bool m_IsGameStarted = false;
+
+    // HACK : this is not that good, but could be improved for clean pause system.
+    //private Vector3 m_SavedPlayerVelocity = Vector3.zero;
+    //private float m_SavedPlayerAngularVelocity = 0f;
+
+    /// <summary>
+    /// Play the game.
+    /// </summary>
+    public static void Play()
+    {
+        if (!Instance.m_IsGameStarted)
+            return;
+
+        Instance.m_IsPaused = false;
+        Instance.m_animator.enabled = true;
+
+        Time.timeScale = 1f;
+
+        // HACK : this is not that good, but could be improved for clean pause system.
+        //CoroutineManager.FixedDelay(() =>
+        //{
+        //    Instance.m_rigidBody.isKinematic = false;
+        //    Instance.m_rigidBody.AddForce(Instance.m_SavedPlayerVelocity, ForceMode2D.Force);
+        //    Instance.m_rigidBody.AddTorque(Instance.m_SavedPlayerAngularVelocity, ForceMode2D.Force);
+        //});
+    }
+
+    /// <summary>
+    /// Pause the game.
+    /// </summary>
+    public static void Pause()
+    {
+        if (!Instance.m_IsGameStarted)
+            return;
+
+        Instance.m_IsPaused = true;
+        Instance.m_animator.enabled = false;
+
+        Time.timeScale = 0f;
+
+        // HACK : this is not that good, but could be improved for clean pause system.
+        //Instance.m_SavedPlayerVelocity = Instance.m_rigidBody.velocity;
+        //Instance.m_SavedPlayerAngularVelocity = Instance.m_rigidBody.angularVelocity;
+        //Instance.m_rigidBody.isKinematic = true;
+    }
+
+    /// <summary>
+    /// Awake is called by Unity at initialization.
+    /// </summary>
+    private void Awake()
     {
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_rigidBody = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
 
         m_nbJump = m_nbJumpMax;
+
+        m_IsGameStarted = true;
     }
 
+    /// <summary>
+    /// Update is called every frame by Unity.
+    /// </summary>
     private void Update()
     {
-        m_horizontalMovement = Input.GetAxis("Horizontal") * m_moveSpeed * Time.fixedDeltaTime;
-
-        if (Input.GetButtonDown("Jump") && m_isGrounded)
-        //        if(Input.GetKeyDown(KeyCode.UpArrow) && m_nbJump > 0)
+        if (!m_IsPaused)
         {
-            m_isJumping = true;
-            m_nbJump--;
+            m_horizontalMovement = Input.GetAxis("Horizontal") * m_moveSpeed * Time.fixedDeltaTime;
+
+            if (Input.GetButtonDown("Jump") && m_isGrounded)
+            //        if(Input.GetKeyDown(KeyCode.UpArrow) && m_nbJump > 0)
+            {
+                m_isJumping = true;
+                m_nbJump--;
+            }
+
+            Flip(m_rigidBody.velocity.x);
+
+            m_animator.SetFloat("speed", Mathf.Abs(m_rigidBody.velocity.x));
+            m_animator.SetFloat("verticalSpeed", m_rigidBody.velocity.y);
+            m_animator.SetBool("isGrounded", m_isGrounded);
+            m_animator.SetBool("isJumping", m_isJumping);
         }
-
-        Flip(m_rigidBody.velocity.x);
-
-        m_animator.SetFloat("speed", Mathf.Abs(m_rigidBody.velocity.x));
-        m_animator.SetFloat("verticalSpeed", m_rigidBody.velocity.y);
-        m_animator.SetBool("isGrounded", m_isGrounded);
-        m_animator.SetBool("isJumping", m_isJumping);
     }
 
+    /// <summary>
+    /// Fixed update is called by Unity every fixed update time.
+    /// </summary>
     private void FixedUpdate()
     {
         MovePlayer(m_horizontalMovement);
