@@ -3,6 +3,7 @@ using UnityEngine.Tilemaps;
 
 using System.IO;
 using System;
+using System.Collections.Generic;
 
 internal enum TilesID : ushort
 {
@@ -21,17 +22,28 @@ public class LevelManager : Singleton<LevelManager>
     private Tilemap m_highlightMap;
 
     /// <summary>
+    /// Prevent the spawning of the pause menu on game launch.
+    /// </summary>
+    private bool m_DebounceFirstFocus = false;
+
+    /// <summary>
     /// GameObject to display on pause.
     /// </summary>
     [SerializeField]
     private GameObject m_PauseMenu = null;
 
+    /// <summary>
+    /// Get the current level ID.
+    /// </summary>
     public static int CurrentLevel => Instance.m_CurrentLevel;
 
+    /// <summary>
+    /// Current level ID.
+    /// </summary>
     private int m_CurrentLevel = 1;
 
     /// <summary>
-    /// Don't destroy this game object on load.
+    /// Prevent destroying this game object on load.
     /// </summary>
     private void Awake()
     {
@@ -44,13 +56,28 @@ public class LevelManager : Singleton<LevelManager>
     /// <param name="focus">Status of the focus. ON = true, OFF = false.</param>
     private void OnApplicationFocus(bool focus)
     {
-        m_PauseMenu.SetActive(!focus);
+        // Prevents pause menu spawn on first frame of the game.
+        if (m_DebounceFirstFocus)
+        {
+            // The only purpose of this is to animate a little.
+            CoroutineManager.Delay(() => m_PauseMenu.SetActive(!focus), 0.1f);
+            CoroutineManager.Delay(() => m_PauseMenu.SetActive(focus), 0.15f);
+            CoroutineManager.Delay(() => m_PauseMenu.SetActive(!focus), 0.2f);
+        }
+        m_DebounceFirstFocus = true;
 
         if (focus)
+        {
             GenerateLevelFromFile(Application.dataPath + $"/Resources/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
+            FileManager.Instance.CloseFile();
+        }
     }
 
-    public void GenerateLevelFromFile(string p_levelFilePath)
+    /// <summary>
+    /// Generate the level from a specified path.
+    /// </summary>
+    /// <param name="levelFilePath">PAth of the level file.</param>
+    public void GenerateLevelFromFile(string levelFilePath)
     {
         Vector3Int currentCell;
         StreamReader reader;
@@ -63,11 +90,11 @@ public class LevelManager : Singleton<LevelManager>
         // 1°) Extraction des informations du fichier de config
         //////////////////////////////////////////////////////////////
 
-        reader = new StreamReader(p_levelFilePath);
+        reader = new StreamReader(levelFilePath);
         content = reader.ReadToEnd();
         reader.Close();
 
-        // On supprime les potentiels saut de ligne en fin de fichier
+        // On supprime les potentiels saut de ligne en fin de fichier.
         while (content.EndsWith("\n") || content.EndsWith("\r"))
             content = content.Remove(content.Length - 1);
 
@@ -78,7 +105,7 @@ public class LevelManager : Singleton<LevelManager>
                 lines[i] = lines[i].Remove(lines[i].Length - 1);
         }
 
-        // On déduis la taille du niveau des informations lues
+        // On déduit la taille du niveau en fonction des informations lues.
         int height = lines.Length;
         int width = 0;
         foreach (string line in lines)
@@ -87,10 +114,10 @@ public class LevelManager : Singleton<LevelManager>
         levelTiles = new int[width, height];
         level = new bool[width, height];
 
-        // 2°) Chargement du niveau à paritr du fichier
+        // 2°) Chargement du niveau à partir du fichier
         //////////////////////////////////////////////////////////////
 
-        // Boucle permettant de savoir s'il y a ou pas une tiles sur la case
+        // Boucle permettant de savoir s'il y a ou pas une tile sur la case.
         for (int j = 0; j < height; j++)
         {
             for (int i = 0; i < width; i++)
@@ -107,7 +134,7 @@ public class LevelManager : Singleton<LevelManager>
             }
         }
 
-        // Boucle afin d'affecter la bonne tile à chaque case (dépendant des voisins)
+        // Boucle afin d'affecter la bonne tuile à chaque case (dépendant des voisins).
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
@@ -137,19 +164,19 @@ public class LevelManager : Singleton<LevelManager>
             }
         }
 
-        // 3°) Affichage des tiles à l'écran
+        // 3°) Affichage des tuiles à l'écran
         //////////////////////////////////////////////////////////////
 
         currentCell = new Vector3Int(0, 0, 0);
 
-        // On efface l'écran (on enlève les anciennes tiles)
+        // On efface l'écran (on enlève les anciennes tuiles).
         for (currentCell.x = 0; currentCell.x < 50; currentCell.x++)
         {
             for (currentCell.y = 0; currentCell.y < 200; currentCell.y++)
                 m_highlightMap.SetTile(currentCell, null);
         }
 
-        // Boucle permettant l'affichage des tiles.
+        // Boucle permettant l'affichage des tuiles.
         for (currentCell.x = 0; currentCell.x < width; (currentCell.x)++)
         {
             for (currentCell.y = 0; currentCell.y < height; (currentCell.y)++)

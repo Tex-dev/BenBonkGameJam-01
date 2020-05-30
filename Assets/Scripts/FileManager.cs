@@ -5,15 +5,39 @@ using UnityEngine;
 /// <summary>
 /// Manages file from outside of the game.
 /// </summary>
-public class FileManager : MonoBehaviour
+public class FileManager : Singleton<FileManager>
 {
+    /// <summary>
+    /// Process of the current file viewer.
+    /// </summary>
+    private System.Diagnostics.Process m_CurrentFileViewProcess = null;
+
+    /// <summary>
+    /// Process of the current folder explorer.
+    /// </summary>
+    private System.Diagnostics.Process m_CurrentFolderViewProcess = null;
+
     /// <summary>
     /// Open file explorer from a specified path.
     /// </summary>
     /// <param name="path">Path to open the file from.</param>
     public void OpenFile(string path)
     {
-        System.Diagnostics.Process.Start(path);
+        m_CurrentFileViewProcess = System.Diagnostics.Process.Start(path);
+    }
+
+    /// <summary>
+    /// Close current file viewer process.
+    /// </summary>
+    public void CloseFile()
+    {
+        try
+        {
+            m_CurrentFileViewProcess?.Kill();
+        }
+        catch
+        {
+        }
     }
 
     /// <summary>
@@ -42,7 +66,19 @@ public class FileManager : MonoBehaviour
     /// <param name="path">Path to open folder at.</param>
     public void OpenFolder(string path)
     {
-        OpenInFileBrowser.Open(path);
+        m_CurrentFolderViewProcess = OpenInFileBrowser.Open(path);
+    }
+
+    /// <summary>
+    /// Close the current folder explorer process.
+    /// </summary>
+    public void CloseFolder()
+    {
+        try
+        {
+            m_CurrentFolderViewProcess?.Kill();
+        }
+        catch { }
     }
 
     /// <summary>
