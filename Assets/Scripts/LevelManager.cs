@@ -20,17 +20,32 @@ public class LevelManager : Singleton<LevelManager>
     [SerializeField]
     private Tilemap m_highlightMap;
 
+    /// <summary>
+    /// GameObject to display on pause.
+    /// </summary>
+    [SerializeField]
+    private GameObject m_PauseMenu = null;
+
     public static int CurrentLevel => Instance.m_CurrentLevel;
 
     private int m_CurrentLevel = 1;
 
+    /// <summary>
+    /// Don't destroy this game object on load.
+    /// </summary>
     private void Awake()
     {
         DontDestroyOnLoad(this);
     }
 
+    /// <summary>
+    /// Called when the application focus is changed.
+    /// </summary>
+    /// <param name="focus">Status of the focus. ON = true, OFF = false.</param>
     private void OnApplicationFocus(bool focus)
-    {
+    {
+        m_PauseMenu.SetActive(!focus);
+
         if (focus)
             GenerateLevelFromFile(Application.dataPath + $"/Resources/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
     }
