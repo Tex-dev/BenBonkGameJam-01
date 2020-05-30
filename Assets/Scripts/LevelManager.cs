@@ -57,6 +57,13 @@ public class LevelManager : Singleton<LevelManager>
     private void Awake()
     {
         DontDestroyOnLoad(this);
+
+        for (int i = 0; i < 1; i++)
+        {
+            if (!File.Exists(Application.dataPath + $"/Resources/level_{i}/level_{i}_blocks.ini"))
+            {
+            }
+        }
     }
 
     /// <summary>
@@ -226,10 +233,11 @@ public class LevelManager : Singleton<LevelManager>
                         break;
 
                     case TilesType.SPAWN:
-                        PlayerManager.Instance.SetInitialPlayerPosition(new Vector2(currentCell.x, currentCell.y + 1f));
+                        PlayerManager.Instance.SetInitialPlayerPosition(new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f));
                         break;
 
                     case TilesType.DESTINATION:
+                        Destination.Instance.SetPosition(new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f));
                         break;
 
                     default:
