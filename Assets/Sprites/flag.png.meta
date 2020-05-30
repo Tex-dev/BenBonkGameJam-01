@@ -14,6 +14,18 @@ TextureImporter:
   - first:
       213: 3011191122049525012
     second: flag_3
+  - first:
+      213: 6920346578585476644
+    second: flag_0
+  - first:
+      213: -6313452754475418491
+    second: flag_1
+  - first:
+      213: -6897379523361641772
+    second: flag_2
+  - first:
+      213: -3587535095059907799
+    second: flag_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -114,9 +126,9 @@ TextureImporter:
       name: flag_0
       rect:
         serializedVersion: 2
-        x: 11
+        x: 0
         y: 0
-        width: 21
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -125,8 +137,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4520e6594d3a878b0800000000000000
-      internalID: -5154189640090123692
+      spriteID: 42e5d233c820a0060800000000000000
+      internalID: 6920346578585476644
       vertices: []
       indices: 
       edges: []
@@ -135,9 +147,9 @@ TextureImporter:
       name: flag_1
       rect:
         serializedVersion: 2
-        x: 43
+        x: 32
         y: 0
-        width: 21
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -146,8 +158,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 401e69ce6d38117f0800000000000000
-      internalID: -643588312621719292
+      spriteID: 58cf74f7b2c1268a0800000000000000
+      internalID: -6313452754475418491
       vertices: []
       indices: 
       edges: []
@@ -156,9 +168,9 @@ TextureImporter:
       name: flag_2
       rect:
         serializedVersion: 2
-        x: 75
+        x: 64
         y: 0
-        width: 21
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -167,8 +179,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4a1da8e258c117f00800000000000000
-      internalID: 1112701941274300836
+      spriteID: 4dae9fc0ed59740a0800000000000000
+      internalID: -6897379523361641772
       vertices: []
       indices: 
       edges: []
@@ -177,9 +189,9 @@ TextureImporter:
       name: flag_3
       rect:
         serializedVersion: 2
-        x: 107
+        x: 96
         y: 0
-        width: 20
+        width: 32
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -188,8 +200,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 415629c1f56e9c920800000000000000
-      internalID: 3011191122049525012
+      spriteID: 92bf4bfa6d3863ec0800000000000000
+      internalID: -3587535095059907799
       vertices: []
       indices: 
       edges: []
