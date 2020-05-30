@@ -52,6 +52,12 @@ public class LevelManager : Singleton<LevelManager>
     private GameObject m_EnemyPrefab = null;
 
     /// <summary>
+    /// Prefab for the destination flag.
+    /// </summary>
+    [SerializeField]
+    private GameObject m_FlagPrefab = null;
+
+    /// <summary>
     /// Get the current level ID.
     /// </summary>
     public static int CurrentLevel => Instance.m_CurrentLevel;
@@ -295,7 +301,8 @@ public class LevelManager : Singleton<LevelManager>
                         break;
 
                     case TilesType.DESTINATION:
-                        Destination.Instance.SetPosition(new Vector2(currentCell.x + 0.48f, currentCell.y + 0.48f));
+                        GameObject flag = Instantiate(m_FlagPrefab);
+                        flag.transform.position = new Vector2(currentCell.x + 0.48f, currentCell.y + 0.48f);
                         break;
 
                     default:

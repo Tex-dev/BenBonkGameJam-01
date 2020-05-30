@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Destination : Singleton<Destination>
+public class Destination : MonoBehaviour
 {
-    public void SetPosition(Vector2 position)
-    {
-        transform.position = position;
-    }
 }
