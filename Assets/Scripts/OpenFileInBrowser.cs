@@ -1,11 +1,5 @@
 ﻿public static class OpenInFileBrowser
 {
-    [UnityEditor.MenuItem("Window/Test OpenInFileBrowser")]
-    public static void Test()
-    {
-        Open(UnityEngine.Application.dataPath);
-    }
-
     public static System.Diagnostics.Process OpenInWin(string path)
     {
         bool openInsidesOfFolder = false;

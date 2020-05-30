@@ -2,8 +2,10 @@
 using UnityEngine.Tilemaps;
 
 using System.IO;
+using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 internal enum TilesID : ushort
 {
@@ -17,12 +19,19 @@ public class LevelManager : Singleton<LevelManager>
 {
     public enum TilesType : ushort
     {
-        EMPTY = 0,
-        BLOCK = 1,
-        ENEMY = 2,
-        SPAWN = 3,
-        DESTINATION = 4,
+        EMPTY,
+        BLOCK,
+        UNMOVEABLE_BLOCK,
+        ENEMY,
+        SPAWN,
+        DESTINATION,
     }
+
+    /// <summary>
+    /// Quantity of levels present in the game.
+    /// </summary>
+    [SerializeField]
+    private int m_LevelAmount = 1;
 
     [SerializeField]
     private Tile[] m_highlightTile;
@@ -37,6 +46,12 @@ public class LevelManager : Singleton<LevelManager>
     private GameObject m_PauseMenu = null;
 
     /// <summary>
+    /// Prefab for the enemy.
+    /// </summary>
+    [SerializeField]
+    private GameObject m_EnemyPrefab = null;
+
+    /// <summary>
     /// Get the current level ID.
     /// </summary>
     public static int CurrentLevel => Instance.m_CurrentLevel;
@@ -44,7 +59,7 @@ public class LevelManager : Singleton<LevelManager>
     /// <summary>
     /// Current level ID.
     /// </summary>
-    private int m_CurrentLevel = 1;
+    private int m_CurrentLevel = 0;
 
     /// <summary>
     /// Is the current loading the first load of the scene?
@@ -58,12 +73,49 @@ public class LevelManager : Singleton<LevelManager>
     {
         DontDestroyOnLoad(this);
 
-        for (int i = 0; i < 1; i++)
+        m_LevelAmount = Directory.GetDirectories(Application.streamingAssetsPath + $"/Levels/").Length;
+
+        for (int i = 0; i < m_LevelAmount; i++)
         {
             if (!File.Exists(Application.dataPath + $"/Resources/level_{i}/level_{i}_blocks.ini"))
             {
+                Directory.CreateDirectory(Application.dataPath + $"/Resources/level_{i}/");
+                File.Copy(Application.streamingAssetsPath + $"/Levels/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini", Application.dataPath + $"/Resources/level_{i}/level_{i}_blocks.ini");
+
+                List<string> lines = File.ReadLines(Application.dataPath + $"/Resources/level_{i}/level_{i}_blocks.ini").ToList();
+                List<string> editedLines = new List<string>();
+                foreach (string line in lines)
+                {
+                    Regex regex = new Regex("[a-zA-Z0-9 -]");
+                    editedLines.Add(regex.Replace(line, " "));
+                }
+                File.WriteAllLines(Application.dataPath + $"/Resources/level_{i}/level_{i}_blocks.ini", editedLines);
             }
         }
+    }
+
+    /// <summary>
+    /// Reset file for the specified level.
+    /// </summary>
+    /// <param name="level">Level to reset the file of.</param>
+    public void ResetLevelFile(int level)
+    {
+        if (!File.Exists(Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini"))
+        {
+            Directory.CreateDirectory(Application.dataPath + $"/Resources/level_{level}/");
+            File.Copy(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini", Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini");
+        }
+
+        List<string> originalLines = File.ReadLines(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini").ToList();
+        List<string> editedLines = new List<string>();
+        foreach (string line in originalLines)
+        {
+            Regex regex = new Regex("[a-zA-Z0-9 -]");
+            editedLines.Add(regex.Replace(line, " "));
+        }
+        File.WriteAllLines(Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini", editedLines);
+
+        GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
     }
 
     /// <summary>
@@ -79,7 +131,7 @@ public class LevelManager : Singleton<LevelManager>
             PlayerManager.Play();
             if (Instance.m_IsInitialLevelLoading)
             {
-                GenerateLevelFromFile(Application.dataPath + $"/Levels/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
+                GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
                 Instance.m_IsInitialLevelLoading = false;
             }
             else
@@ -161,6 +213,10 @@ public class LevelManager : Singleton<LevelManager>
                             map[i, height - 1 - j] = TilesType.DESTINATION;
                             break;
 
+                        case 'e':
+                            map[i, height - 1 - j] = TilesType.ENEMY;
+                            break;
+
                         default:
                             break;
                     }
@@ -230,6 +286,8 @@ public class LevelManager : Singleton<LevelManager>
                         break;
 
                     case TilesType.ENEMY:
+                        GameObject enemy = Instantiate(m_EnemyPrefab);
+                        enemy.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
                         break;
 
                     case TilesType.SPAWN:
@@ -237,7 +295,7 @@ public class LevelManager : Singleton<LevelManager>
                         break;
 
                     case TilesType.DESTINATION:
-                        Destination.Instance.SetPosition(new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f));
+                        Destination.Instance.SetPosition(new Vector2(currentCell.x + 0.48f, currentCell.y + 0.48f));
                         break;
 
                     default:

@@ -82,16 +82,10 @@ public class FileManager : Singleton<FileManager>
     }
 
     /// <summary>
-    /// Refresh map view from the file.
-    /// </summary>
-    public void RefreshFileView()
-    {
-    }
-
-    /// <summary>
     /// Reset file, reloading the level from the default files.
     /// </summary>
     public void ResetFile()
     {
+        LevelManager.Instance.ResetLevelFile(LevelManager.CurrentLevel);
     }
 }
