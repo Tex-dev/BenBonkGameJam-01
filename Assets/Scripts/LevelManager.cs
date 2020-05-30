@@ -4,7 +4,7 @@ using UnityEngine.Tilemaps;
 using System.IO;
 using System;
 
-enum TilesID : ushort
+internal enum TilesID : ushort
 {
     UP = 1,
     RIGHT = 2,
@@ -12,17 +12,27 @@ enum TilesID : ushort
     LEFT = 8
 }
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
     [SerializeField]
-    private Tile[]      m_highlightTile;
+    private Tile[] m_highlightTile;
+
     [SerializeField]
-    private Tilemap     m_highlightMap;
+    private Tilemap m_highlightMap;
+
+    public static int CurrentLevel => Instance.m_CurrentLevel;
+
+    private int m_CurrentLevel = 1;
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
 
     private void OnApplicationFocus(bool focus)
     {
-        if(focus)
-            GenerateLevelFromFile(Application.dataPath + "/Resources/level_1/blocks.ini");
+        if (focus)
+            GenerateLevelFromFile(Application.dataPath + $"/Resources/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
     }
 
     public void GenerateLevelFromFile(string p_levelFilePath)
@@ -35,10 +45,9 @@ public class LevelManager : MonoBehaviour
         int[,] levelTiles;          // Chaque case contient l'indice de la tile qu'elle contient.
         bool[,] level;              // Chaque case vaut ici, true si elle contient une tile, false sinon.
 
-
-        // 1°) Extraction des informations du fichier de config
-        //////////////////////////////////////////////////////////////
-        
+        // 1°) Extraction des informations du fichier de config
+        //////////////////////////////////////////////////////////////
+
         reader = new StreamReader(p_levelFilePath);
         content = reader.ReadToEnd();
         reader.Close();
@@ -62,7 +71,6 @@ public class LevelManager : MonoBehaviour
 
         levelTiles = new int[width, height];
         level = new bool[width, height];
-
 
         // 2°) Chargement du niveau à paritr du fichier
         //////////////////////////////////////////////////////////////
@@ -114,8 +122,6 @@ public class LevelManager : MonoBehaviour
             }
         }
 
-
-
         // 3°) Affichage des tiles à l'écran
         //////////////////////////////////////////////////////////////
 
@@ -133,13 +139,11 @@ public class LevelManager : MonoBehaviour
         {
             for (currentCell.y = 0; currentCell.y < height; (currentCell.y)++)
             {
-                if(level[currentCell.x, currentCell.y])
+                if (level[currentCell.x, currentCell.y])
                     m_highlightMap.SetTile(currentCell, m_highlightTile[levelTiles[currentCell.x, currentCell.y]]);
                 else
                     m_highlightMap.SetTile(currentCell, null);
-
             }
-
         }
     }
 }
