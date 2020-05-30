@@ -6,34 +6,42 @@
 public class PlayerManager : MonoBehaviour
 {
     [SerializeField]
-    private float m_moveSpeed;
-    [SerializeField]
-    private float m_jumpForce;
+    private float m_moveSpeed = 300f;
 
     [SerializeField]
-    private Transform m_groundCheck;
+    private float m_jumpForce = 250f;
+
     [SerializeField]
-    private float m_groundCheckRadius;
+    private Transform m_groundCheck = null;
+
+    [SerializeField]
+    private float m_groundCheckRadius = 0.1f;
+
     [SerializeField]
     private LayerMask m_collisionLayer;
 
-    private Rigidbody2D m_rigidBody;
-    private SpriteRenderer m_spriteRenderer;
+    private Rigidbody2D m_rigidBody = null;
+
+    private SpriteRenderer m_spriteRenderer = null;
+
     private Vector2 m_velocity = Vector2.zero;
+
     private bool m_isJumping = false;
+
     private bool m_isGrounded = true;
 
     private float m_horizontalMovement;
 
     [SerializeField]
-    private int m_nbJumpMax;
-    [SerializeField]
-    private int m_nbJump;
+    private int m_nbJumpMax = 0;
 
-    private Animator m_animator;
+    [SerializeField]
+    private int m_nbJump = 0;
+
+    private Animator m_animator = null;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_rigidBody = GetComponent<Rigidbody2D>();
@@ -42,17 +50,16 @@ public class PlayerManager : MonoBehaviour
         m_nbJump = m_nbJumpMax;
     }
 
-    void Update()
+    private void Update()
     {
         m_horizontalMovement = Input.GetAxis("Horizontal") * m_moveSpeed * Time.fixedDeltaTime;
 
         if (Input.GetButtonDown("Jump") && m_isGrounded)
-//        if(Input.GetKeyDown(KeyCode.UpArrow) && m_nbJump > 0)
+        //        if(Input.GetKeyDown(KeyCode.UpArrow) && m_nbJump > 0)
         {
             m_isJumping = true;
             m_nbJump--;
         }
-
 
         Flip(m_rigidBody.velocity.x);
 
@@ -70,7 +77,7 @@ public class PlayerManager : MonoBehaviour
             m_nbJump = m_nbJumpMax;
     }
 
-    void MovePlayer(float p_horizontalMovement)
+    private void MovePlayer(float p_horizontalMovement)
     {
         Vector2 targetVelocity = new Vector2(p_horizontalMovement, m_rigidBody.velocity.y);
         m_rigidBody.velocity = Vector2.SmoothDamp(m_rigidBody.velocity, targetVelocity, ref m_velocity, 0.05f);
@@ -82,14 +89,13 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    void Flip(float p_velocity)
+    private void Flip(float p_velocity)
     {
         if (p_velocity > 0.1f)
             m_spriteRenderer.flipX = false;
 
         if (p_velocity < -0.1f)
             m_spriteRenderer.flipX = true;
-
     }
 
     public void Jump(float p_force)
