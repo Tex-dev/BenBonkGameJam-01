@@ -21,8 +21,9 @@ public class FileManager : MonoBehaviour
     /// </summary>
     public void ClickFile()
     {
-        // TODO : should open current map file.
-        OpenFile(Application.dataPath + "/Levels/coucou.ini");
+        int currentLevel = LevelManager.CurrentLevel;
+
+        OpenFile(Application.dataPath + $"/Resources/level_{currentLevel}/level_{currentLevel}_blocks.ini");
     }
 
     /// <summary>
@@ -30,8 +31,9 @@ public class FileManager : MonoBehaviour
     /// </summary>
     public void ClickFolder()
     {
-        // TODO : should open current map folder.
-        OpenFolder(Application.dataPath + "/Levels/");
+        int currentLevel = LevelManager.CurrentLevel;
+
+        OpenFolder(Application.dataPath + $"/Resources/level_{currentLevel}/");
     }
 
     /// <summary>
