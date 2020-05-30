@@ -10,11 +10,20 @@ internal enum TilesID : ushort
     UP = 1,
     RIGHT = 2,
     DOWN = 4,
-    LEFT = 8
+    LEFT = 8,
 }
 
 public class LevelManager : Singleton<LevelManager>
 {
+    public enum TilesType : ushort
+    {
+        EMPTY = 0,
+        BLOCK = 1,
+        ENEMY = 2,
+        SPAWN = 3,
+        DESTINATION = 4,
+    }
+
     [SerializeField]
     private Tile[] m_highlightTile;
 
@@ -38,6 +47,11 @@ public class LevelManager : Singleton<LevelManager>
     private int m_CurrentLevel = 1;
 
     /// <summary>
+    /// Is the current loading the first load of the scene?
+    /// </summary>
+    private bool m_IsInitialLevelLoading = true;
+
+    /// <summary>
     /// Prevent destroying this game object on load.
     /// </summary>
     private void Awake()
@@ -56,7 +70,14 @@ public class LevelManager : Singleton<LevelManager>
         if (focus)
         {
             PlayerManager.Play();
-            GenerateLevelFromFile(Application.dataPath + $"/Resources/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
+            if (Instance.m_IsInitialLevelLoading)
+            {
+                GenerateLevelFromFile(Application.dataPath + $"/Levels/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
+                Instance.m_IsInitialLevelLoading = false;
+            }
+            else
+                GenerateLevelFromFile(Application.dataPath + $"/Resources/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
+
             FileManager.Instance.CloseFile();
         }
         else
@@ -75,7 +96,8 @@ public class LevelManager : Singleton<LevelManager>
 
         // Tableaux représentant le niveaux.
         int[,] levelTiles;          // Chaque case contient l'indice de la tile qu'elle contient.
-        bool[,] level;              // Chaque case vaut ici, true si elle contient une tile, false sinon.
+
+        TilesType[,] map;           // Chaque case contient le type de bloc qu'elle contient.
 
         // 1°) Extraction des informations du fichier de config
         //////////////////////////////////////////////////////////////
@@ -102,7 +124,7 @@ public class LevelManager : Singleton<LevelManager>
             width = Mathf.Max(width, line.Length);
 
         levelTiles = new int[width, height];
-        level = new bool[width, height];
+        map = new TilesType[width, height];
 
         // 2°) Chargement du niveau à partir du fichier
         //////////////////////////////////////////////////////////////
@@ -114,13 +136,32 @@ public class LevelManager : Singleton<LevelManager>
             {
                 if (i < lines[j].Length)
                 {
-                    if (lines[j][i] == ' ')
-                        level[i, height - 1 - j] = false;
-                    else
-                        level[i, height - 1 - j] = true;
+                    switch (lines[j][i])
+                    {
+                        case ' ':
+                            map[i, height - 1 - j] = TilesType.EMPTY;
+                            break;
+
+                        case '*':
+                            map[i, height - 1 - j] = TilesType.BLOCK;
+                            break;
+
+                        case 's':
+                            map[i, height - 1 - j] = TilesType.SPAWN;
+                            break;
+
+                        case 'd':
+                            map[i, height - 1 - j] = TilesType.DESTINATION;
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
                 else
-                    level[i, height - 1 - j] = false;
+                {
+                    map[i, height - 1 - j] = TilesType.EMPTY;
+                }
             }
         }
 
@@ -129,24 +170,24 @@ public class LevelManager : Singleton<LevelManager>
         {
             for (int j = 0; j < height; j++)
             {
-                if (level[i, j])
+                if (map[i, j] == TilesType.BLOCK)
                 {
                     int tileID = 0;
 
                     // UP
-                    if (j < height - 1 && level[i, j + 1])
+                    if (j < height - 1 && map[i, j + 1] == TilesType.BLOCK)
                         tileID += (int)TilesID.UP;
 
                     // DOWN
-                    if (j > 0 && level[i, j - 1])
+                    if (j > 0 && map[i, j - 1] == TilesType.BLOCK)
                         tileID += (int)TilesID.DOWN;
 
                     // RIGHT
-                    if (i < width - 1 && level[i + 1, j])
+                    if (i < width - 1 && map[i + 1, j] == TilesType.BLOCK)
                         tileID += (int)TilesID.RIGHT;
 
                     // LEFT
-                    if (i > 0 && level[i - 1, j])
+                    if (i > 0 && map[i - 1, j] == TilesType.BLOCK)
                         tileID += (int)TilesID.LEFT;
 
                     levelTiles[i, j] = tileID;
@@ -171,10 +212,29 @@ public class LevelManager : Singleton<LevelManager>
         {
             for (currentCell.y = 0; currentCell.y < height; (currentCell.y)++)
             {
-                if (level[currentCell.x, currentCell.y])
-                    m_highlightMap.SetTile(currentCell, m_highlightTile[levelTiles[currentCell.x, currentCell.y]]);
-                else
-                    m_highlightMap.SetTile(currentCell, null);
+                switch (map[currentCell.x, currentCell.y])
+                {
+                    case TilesType.EMPTY:
+                        m_highlightMap.SetTile(currentCell, null);
+                        break;
+
+                    case TilesType.BLOCK:
+                        m_highlightMap.SetTile(currentCell, m_highlightTile[levelTiles[currentCell.x, currentCell.y]]);
+                        break;
+
+                    case TilesType.ENEMY:
+                        break;
+
+                    case TilesType.SPAWN:
+                        PlayerManager.Instance.SetInitialPlayerPosition(new Vector2(currentCell.x, currentCell.y + 1f));
+                        break;
+
+                    case TilesType.DESTINATION:
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }
     }

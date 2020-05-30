@@ -145,6 +145,11 @@ public class PlayerManager : Singleton<PlayerManager>
             m_nbJump = m_nbJumpMax;
     }
 
+    public void SetInitialPlayerPosition(Vector2 initialPosition)
+    {
+        m_rigidBody.transform.position = initialPosition;
+    }
+
     private void MovePlayer(float p_horizontalMovement)
     {
         Vector2 targetVelocity = new Vector2(p_horizontalMovement, m_rigidBody.velocity.y);
