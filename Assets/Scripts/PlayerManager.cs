@@ -53,7 +53,14 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     private bool m_IsGameStarted = false;
 
+    /// <summary>
+    /// Called when play mode is activated.
+    /// </summary>
     public Action OnPlay = null;
+
+    /// <summary>
+    /// Called when pause mode is activated.
+    /// </summary>
     public Action OnPause = null;
 
     // HACK : this is not that good, but could be improved for clean pause system.

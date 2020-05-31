@@ -13,7 +13,7 @@ public class Destination : MonoBehaviour
     /// <param name="other">Collider triggering.</param>
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Player") && other is BoxCollider2D)
-            LevelLogic.Instance.DestinationReached();
+        if (other.CompareTag("Player") && other is BoxCollider2D)
+            LevelLogic.Instance.OnDestinationReached();
     }
 }
