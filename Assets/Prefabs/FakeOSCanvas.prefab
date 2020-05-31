@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 7.499991, y: 0}
+  m_AnchoredPosition: {x: 7.5, y: 0}
   m_SizeDelta: {x: -15.000018, y: -6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &390266762
@@ -314,7 +314,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.499991, y: 0}
+  m_AnchoredPosition: {x: 7.5, y: 0}
   m_SizeDelta: {x: -15.000018, y: -6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1828748684
@@ -846,7 +846,7 @@ MonoBehaviour:
 
     "G" to open folder
 
-    "H" to reset level'
+    "H" to reset file'
 --- !u!1 &363369601244475509
 GameObject:
   m_ObjectHideFlags: 0
