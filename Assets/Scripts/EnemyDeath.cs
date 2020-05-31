@@ -2,6 +2,9 @@
 
 public class EnemyDeath : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject m_enemyGO = null;
+
     /// <summary>
     /// Called by Unity when a collision is triggered.
     /// </summary>
@@ -18,6 +21,8 @@ public class EnemyDeath : MonoBehaviour
             collision.gameObject.GetComponent<PlayerManager>().Jump(200, true);
             GetComponent<BoxCollider2D>().enabled = false;
             GetComponentInParent<EnemyManager>().Death();
+
+            CoroutineManager.Delay(() => Destroy(m_enemyGO), 3.0f);
         }
     }
 }

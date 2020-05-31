@@ -83,7 +83,7 @@ MonoBehaviour:
   - {fileID: 7668564350735966089}
   - {fileID: 2271283424066672467}
   m_damage: 10
-  bounceVelocity: {x: 2000, y: 100}
+  m_BounceVelocity: {x: 2000, y: 80}
 --- !u!212 &4097435653694058520
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -241,6 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8d1b76ed3f8aea46a221879411d88d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_enemyGO: {fileID: 4097435655201817450}
 --- !u!82 &5499666880139725527
 AudioSource:
   m_ObjectHideFlags: 0
