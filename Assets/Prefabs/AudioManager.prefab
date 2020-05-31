@@ -561,7 +561,7 @@ MonoBehaviour:
   m_ThemeLoop: {fileID: 4848188577635084033}
   m_ThemeLoopPaused: {fileID: 4848188578545156904}
   m_FadeDuration: 0.75
-  m_VolumeRange: {x: 0.03, y: 1}
+  m_VolumeRange: {x: 0.03, y: 0.5}
 --- !u!1 &9210979888341899100
 GameObject:
   m_ObjectHideFlags: 0
