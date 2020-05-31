@@ -27,7 +27,6 @@ public class PlayerManager : Singleton<PlayerManager>
     private Vector2 m_velocity = Vector2.zero;
 
     private bool m_isJumping = false;
-
     private bool m_isGrounded = true;
     private bool m_canMove = true;
 
