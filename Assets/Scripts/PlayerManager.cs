@@ -152,6 +152,7 @@ public class PlayerManager : Singleton<PlayerManager>
             m_animator.SetBool("isJumping", m_isJumping);
         }
 
+        //TODO Thin to remove this
         if (Input.GetKeyDown(KeyCode.R))
             PlayerAnimation(true);
 

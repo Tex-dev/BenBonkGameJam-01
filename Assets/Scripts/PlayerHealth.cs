@@ -31,14 +31,6 @@ public class PlayerHealth : MonoBehaviour
         m_rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H))
-            TakeDamage(20, true);
-
-    }
-
     public void TakeDamage(int p_damage, bool p_isBounceEffect)
     {
         if(!m_isInvisible)
