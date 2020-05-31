@@ -58,6 +58,11 @@ public class LevelManager : Singleton<LevelManager>
     private GameObject m_FlagPrefab = null;
 
     /// <summary>
+    /// All spawned items.
+    /// </summary>
+    private List<GameObject> m_SpawnedItems = new List<GameObject>();
+
+    /// <summary>
     /// Get the current level ID.
     /// </summary>
     public static int CurrentLevel => Instance.m_CurrentLevel;
@@ -120,6 +125,13 @@ public class LevelManager : Singleton<LevelManager>
             editedLines.Add(regex.Replace(line, " "));
         }
         File.WriteAllLines(Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini", editedLines);
+
+        // Clear all previously spawned item.
+        foreach (GameObject item in m_SpawnedItems)
+        {
+            Destroy(item);
+        }
+        m_SpawnedItems.Clear();
 
         GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
     }
@@ -294,6 +306,8 @@ public class LevelManager : Singleton<LevelManager>
                     case TilesType.ENEMY:
                         GameObject enemy = Instantiate(m_EnemyPrefab);
                         enemy.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
+
+                        m_SpawnedItems.Add(enemy);
                         break;
 
                     case TilesType.SPAWN:
@@ -303,6 +317,8 @@ public class LevelManager : Singleton<LevelManager>
                     case TilesType.DESTINATION:
                         GameObject flag = Instantiate(m_FlagPrefab);
                         flag.transform.position = new Vector2(currentCell.x + 0.48f, currentCell.y + 0.48f);
+
+                        m_SpawnedItems.Add(flag);
                         break;
 
                     default:
