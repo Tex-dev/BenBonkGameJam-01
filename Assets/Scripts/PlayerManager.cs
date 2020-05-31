@@ -1,8 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
-[RequireComponent(typeof(SpriteRenderer))]
 public class PlayerManager : Singleton<PlayerManager>
 {
     [SerializeField]
@@ -18,7 +18,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private float m_groundCheckRadius = 0.1f;
 
     [SerializeField]
-    private LayerMask m_collisionLayer;
+    private LayerMask m_collisionLayer = ~0;
 
     private Rigidbody2D m_rigidBody = null;
 
@@ -27,8 +27,8 @@ public class PlayerManager : Singleton<PlayerManager>
     private Vector2 m_velocity = Vector2.zero;
 
     private bool m_isJumping = false;
-
     private bool m_isGrounded = true;
+    private bool m_canMove = true;
 
     private float m_horizontalMovement;
 
@@ -40,6 +40,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private Animator m_animator = null;
 
+    private IEnumerator m_coroutineAnim = null;
+
     /// <summary>
     /// Is the game paused?
     /// </summary>
@@ -49,6 +51,16 @@ public class PlayerManager : Singleton<PlayerManager>
     /// Is the game done starting.
     /// </summary>
     private bool m_IsGameStarted = false;
+
+    /// <summary>
+    /// Called when play mode is activated.
+    /// </summary>
+    public Action OnPlay = null;
+
+    /// <summary>
+    /// Called when pause mode is activated.
+    /// </summary>
+    public Action OnPause = null;
 
     // HACK : this is not that good, but could be improved for clean pause system.
     //private Vector3 m_SavedPlayerVelocity = Vector3.zero;
@@ -60,7 +72,10 @@ public class PlayerManager : Singleton<PlayerManager>
     public static void Play()
     {
         if (!Instance.m_IsGameStarted)
+        {
             return;
+        }
+        Instance.OnPlay?.Invoke();
 
         Instance.m_IsPaused = false;
         Instance.m_animator.enabled = true;
@@ -82,7 +97,10 @@ public class PlayerManager : Singleton<PlayerManager>
     public static void Pause()
     {
         if (!Instance.m_IsGameStarted)
+        {
             return;
+        }
+        Instance.OnPause?.Invoke();
 
         Instance.m_IsPaused = true;
         Instance.m_animator.enabled = false;
@@ -100,9 +118,10 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     private void Awake()
     {
-        m_spriteRenderer = GetComponent<SpriteRenderer>();
+        //        m_spriteRenderer = GetComponent<SpriteRenderer>();
+        m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        m_animator = GetComponentInChildren<Animator>();
         m_rigidBody = GetComponent<Rigidbody2D>();
-        m_animator = GetComponent<Animator>();
 
         m_nbJump = m_nbJumpMax;
 
@@ -114,7 +133,7 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     private void Update()
     {
-        if (!m_IsPaused)
+        if (!m_IsPaused && m_canMove)
         {
             m_horizontalMovement = Input.GetAxis("Horizontal") * m_moveSpeed * Time.fixedDeltaTime;
 
@@ -132,6 +151,12 @@ public class PlayerManager : Singleton<PlayerManager>
             m_animator.SetBool("isGrounded", m_isGrounded);
             m_animator.SetBool("isJumping", m_isJumping);
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+            PlayerAnimation(true);
+
+        if (Input.GetKeyDown(KeyCode.T))
+            PlayerAnimation(false);
     }
 
     /// <summary>
@@ -145,17 +170,15 @@ public class PlayerManager : Singleton<PlayerManager>
             m_nbJump = m_nbJumpMax;
     }
 
-    public void SetInitialPlayerPosition(Vector2 initialPosition)
-    {
-        m_rigidBody.transform.position = initialPosition;
-    }
-
     private void MovePlayer(float p_horizontalMovement)
     {
+        if (!m_canMove)
+            return;
+
         Vector2 targetVelocity = new Vector2(p_horizontalMovement, m_rigidBody.velocity.y);
         m_rigidBody.velocity = Vector2.SmoothDamp(m_rigidBody.velocity, targetVelocity, ref m_velocity, 0.05f);
 
-        if (m_isJumping)
+        if (m_isJumping && m_canMove)
         {
             Jump(m_jumpForce);
             m_isJumping = false;
@@ -180,5 +203,78 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(m_groundCheck.position, m_groundCheckRadius);
+    }
+
+    private void EnableMovement()
+    {
+        m_canMove = true;
+
+        m_rigidBody.gravityScale = 1;
+    }
+
+    private void DisableMovement()
+    {
+        m_canMove = false;
+
+        m_rigidBody.velocity = Vector2.zero;
+        m_rigidBody.gravityScale = 0;
+    }
+
+    public void PlayerAnimation(bool isEndAnim)
+    {
+        if (m_coroutineAnim != null)
+            StopCoroutine(m_coroutineAnim);
+
+        m_coroutineAnim = SpiralAnimation(isEndAnim);
+        StartCoroutine(m_coroutineAnim);
+
+        if (isEndAnim)
+            DisableMovement();
+    }
+
+    private IEnumerator SpiralAnimation(bool diminution)
+    {
+        bool isFInished = false;
+
+        if (diminution)
+        {
+            while (m_spriteRenderer.transform.localScale.magnitude > 0.1f)
+            {
+                m_spriteRenderer.transform.localScale = m_spriteRenderer.transform.localScale * 0.992f;
+                m_spriteRenderer.transform.Rotate(0.0f, 0.0f, 3.0f, Space.Self);
+                yield return 1;
+            }
+        }
+        else
+        {
+            // Boolean to know if scale if finished and finish the turn of rotation;
+            bool scaleOK = false;
+
+            while (!isFInished)
+            {
+                // Scale animation
+                if (!scaleOK)
+                    m_spriteRenderer.transform.localScale = m_spriteRenderer.transform.localScale / 0.992f;
+
+                if (m_spriteRenderer.transform.localScale.magnitude >= Vector3.one.magnitude)
+                {
+                    m_spriteRenderer.transform.localScale = Vector3.one;
+                    scaleOK = true;
+                }
+
+                // Rotation animation
+                m_spriteRenderer.transform.Rotate(0.0f, 0.0f, 3.0f, Space.Self);
+
+                if (scaleOK && m_spriteRenderer.transform.eulerAngles.z > 355)
+                {
+                    m_spriteRenderer.transform.rotation = Quaternion.identity;
+                    isFInished = true;
+                }
+
+                yield return 1;
+            }
+
+            EnableMovement();
+        }
     }
 }

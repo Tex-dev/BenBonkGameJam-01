@@ -1,23 +1,25 @@
 ﻿using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerHealth : MonoBehaviour
 {
     private int                     m_maxHealth = 100;
     private int                     m_health;
 
     [SerializeField]
-    private HealthBarManager        m_healthBar;
+    private HealthBarManager        m_healthBar = null;
 
     private SpriteRenderer          m_graphics;
+    private Rigidbody2D             m_rigidbody2D;
 
     private bool                    m_isInvisible = false;
 
     [SerializeField]
-    private float                   m_invisibilityFramesDelay;
+    private float                   m_invisibilityFramesDelay = 0.2f;
 
     [SerializeField]
-    private float                   m_invisibilityDelay;
+    private float                   m_invisibilityDelay = 2.0f;
 
 
     void Start()
@@ -25,18 +27,19 @@ public class PlayerHealth : MonoBehaviour
         m_health = m_maxHealth;
         m_healthBar.SetMaxHealth(m_maxHealth);
 
-        m_graphics = GetComponent<SpriteRenderer>();
+        m_graphics = GetComponentInChildren<SpriteRenderer>();
+        m_rigidbody2D = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.H))
-            TakeDamage(20);
+            TakeDamage(20, true);
 
     }
 
-    public void TakeDamage(int p_damage)
+    public void TakeDamage(int p_damage, bool p_isBounceEffect)
     {
         if(!m_isInvisible)
         {

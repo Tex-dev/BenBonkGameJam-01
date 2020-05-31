@@ -3,7 +3,6 @@ using UnityEngine.Tilemaps;
 
 using System.IO;
 using System.Linq;
-using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -15,8 +14,14 @@ internal enum TilesID : ushort
     LEFT = 8,
 }
 
+/// <summary>
+/// Manages level files.
+/// </summary>
 public class LevelManager : Singleton<LevelManager>
 {
+    /// <summary>
+    /// Type of the tile.
+    /// </summary>
     public enum TilesType : ushort
     {
         EMPTY,
@@ -33,11 +38,17 @@ public class LevelManager : Singleton<LevelManager>
     [SerializeField]
     private int m_LevelAmount = 1;
 
+    /// <summary>
+    /// List of block tiles
+    /// </summary>
     [SerializeField]
-    private Tile[] m_highlightTile;
+    private Tile[] m_highlightTile = null;
 
+    /// <summary>
+    /// The tilemap where write level
+    /// </summary>
     [SerializeField]
-    private Tilemap m_highlightMap;
+    private Tilemap m_highlightMap = null;
 
     /// <summary>
     /// GameObject to display on pause.
@@ -109,7 +120,7 @@ public class LevelManager : Singleton<LevelManager>
     /// Reset file for the specified level.
     /// </summary>
     /// <param name="level">Level to reset the file of.</param>
-    public void ResetLevelFile(int level)
+    public void LoadLevel(int level)
     {
         if (!File.Exists(Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini"))
         {
@@ -155,7 +166,7 @@ public class LevelManager : Singleton<LevelManager>
             else
                 GenerateLevelFromFile(Application.dataPath + $"/Resources/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
 
-            FileManager.Instance.CloseFile();
+            FakeOS.Instance.CloseFile();
         }
         else
             PlayerManager.Pause();
@@ -170,6 +181,7 @@ public class LevelManager : Singleton<LevelManager>
         Vector3Int currentCell;
         StreamReader reader;
         string content;
+        int nbPossiblebloc = m_highlightTile.Length / 16;
 
         // Tableaux représentant le niveaux.
         int[,] levelTiles;          // Chaque case contient l'indice de la tile qu'elle contient.
@@ -300,8 +312,14 @@ public class LevelManager : Singleton<LevelManager>
                         break;
 
                     case TilesType.BLOCK:
-                        m_highlightMap.SetTile(currentCell, m_highlightTile[levelTiles[currentCell.x, currentCell.y]]);
-                        break;
+                        {
+                            int idTile;
+                            int rand = Random.Range(0, nbPossiblebloc);
+                            idTile = rand * 16 + levelTiles[currentCell.x, currentCell.y];
+
+                            m_highlightMap.SetTile(currentCell, m_highlightTile[idTile]);
+                            break;
+                        }
 
                     case TilesType.ENEMY:
                         GameObject enemy = Instantiate(m_EnemyPrefab);
@@ -311,7 +329,9 @@ public class LevelManager : Singleton<LevelManager>
                         break;
 
                     case TilesType.SPAWN:
-                        PlayerManager.Instance.SetInitialPlayerPosition(new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f));
+                        PlayerManager.Instance.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
+
+                        // TODO : play spawn animation on new level load.
                         break;
 
                     case TilesType.DESTINATION:
