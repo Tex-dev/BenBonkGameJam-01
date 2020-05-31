@@ -13,7 +13,10 @@ public class EnemyDeath : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
-            collision.gameObject.GetComponent<PlayerManager>().Jump(150);
+            print("JE ME MEEEEUUUUUUURRRRT");
+
+            collision.gameObject.GetComponent<PlayerManager>().Jump(200);
+            GetComponent<BoxCollider2D>().enabled = false;
             GetComponentInParent<EnemyManager>().Death();
         }
     }

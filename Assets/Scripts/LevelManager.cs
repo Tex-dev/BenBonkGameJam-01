@@ -3,7 +3,6 @@ using UnityEngine.Tilemaps;
 
 using System.IO;
 using System.Linq;
-using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -39,11 +38,17 @@ public class LevelManager : Singleton<LevelManager>
     [SerializeField]
     private int m_LevelAmount = 1;
 
+    /// <summary>
+    /// List of block tiles
+    /// </summary>
     [SerializeField]
-    private Tile[] m_highlightTile;
+    private Tile[] m_highlightTile = null;
 
+    /// <summary>
+    /// The tilemap where write level
+    /// </summary>
     [SerializeField]
-    private Tilemap m_highlightMap;
+    private Tilemap m_highlightMap = null;
 
     /// <summary>
     /// GameObject to display on pause.
@@ -176,6 +181,7 @@ public class LevelManager : Singleton<LevelManager>
         Vector3Int currentCell;
         StreamReader reader;
         string content;
+        int nbPossiblebloc = m_highlightTile.Length / 16;
 
         // Tableaux représentant le niveaux.
         int[,] levelTiles;          // Chaque case contient l'indice de la tile qu'elle contient.
@@ -306,8 +312,14 @@ public class LevelManager : Singleton<LevelManager>
                         break;
 
                     case TilesType.BLOCK:
-                        m_highlightMap.SetTile(currentCell, m_highlightTile[levelTiles[currentCell.x, currentCell.y]]);
-                        break;
+                        {
+                            int idTile;
+                            int rand = Random.Range(0, nbPossiblebloc);
+                            idTile = rand * 16 + levelTiles[currentCell.x, currentCell.y];
+
+                            m_highlightMap.SetTile(currentCell, m_highlightTile[idTile]);
+                            break;
+                        }
 
                     case TilesType.ENEMY:
                         GameObject enemy = Instantiate(m_EnemyPrefab);

@@ -8,7 +8,7 @@ public class PlayerHealth : MonoBehaviour
     private int                     m_health;
 
     [SerializeField]
-    private HealthBarManager        m_healthBar;
+    private HealthBarManager        m_healthBar = null;
 
     private SpriteRenderer          m_graphics;
     private Rigidbody2D             m_rigidbody2D;
@@ -16,10 +16,10 @@ public class PlayerHealth : MonoBehaviour
     private bool                    m_isInvisible = false;
 
     [SerializeField]
-    private float                   m_invisibilityFramesDelay;
+    private float                   m_invisibilityFramesDelay = 0.2f;
 
     [SerializeField]
-    private float                   m_invisibilityDelay;
+    private float                   m_invisibilityDelay = 2.0f;
 
 
     void Start()

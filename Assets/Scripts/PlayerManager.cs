@@ -18,7 +18,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private float m_groundCheckRadius = 0.1f;
 
     [SerializeField]
-    private LayerMask m_collisionLayer;
+    private LayerMask m_collisionLayer = ~0;
 
     private Rigidbody2D m_rigidBody = null;
 

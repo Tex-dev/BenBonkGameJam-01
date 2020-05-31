@@ -7,9 +7,9 @@ public class HealthBarManager : MonoBehaviour
     private Slider      m_slider = null;
 
     [SerializeField]
-    private Gradient    m_gradient;
+    private Gradient    m_gradient = null;
     [SerializeField]
-    private Image       m_fill;
+    private Image       m_fill = null;
 
     private void Start()
     {

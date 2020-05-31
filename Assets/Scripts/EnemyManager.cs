@@ -3,18 +3,18 @@
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField]
-    private float m_speed;
+    private float m_speed   = 1;
 
     [SerializeField]
-    private bool m_isBounceInDamage;
+    private bool m_isBounceInDamage = false;
 
     [SerializeField]
-    private Transform[] m_waypoints;
+    private Transform[] m_waypoints = null;
     private Transform m_target;
     private int m_targetID;
 
     [SerializeField]
-    private int m_damage;
+    private int m_damage = 10;
 
     private bool m_isDead = false;
 

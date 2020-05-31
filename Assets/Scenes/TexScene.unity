@@ -296,9 +296,9 @@ PrefabInstance:
       propertyPath: m_Text
       value: '''F'' to open file
 
-''                G'' to open folder
+''                        G'' to open folder
 
-''               
+''                       
         H'' to reset file'
       objectReference: {fileID: 0}
     - target: {fileID: 363369601333469385, guid: 0027ce346b363684cab20edbb35494ac,
@@ -410,22 +410,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LevelAmount: 1
   m_highlightTile:
-  - {fileID: 11400000, guid: 60b864c500f9fd242b03661565b7cc75, type: 2}
-  - {fileID: 11400000, guid: dac3fb37419cabb4389b58049afd4bd5, type: 2}
-  - {fileID: 11400000, guid: 6ef642492521c6146911b3490859d2b5, type: 2}
-  - {fileID: 11400000, guid: 9677b5d92f3c3ed4abb9da4e65711890, type: 2}
-  - {fileID: 11400000, guid: 631f4e88972466f4997bd666c3b65b55, type: 2}
-  - {fileID: 11400000, guid: 255aefbfb094c06438b5b524c347517a, type: 2}
-  - {fileID: 11400000, guid: d5384e060e430fb4ab0636009c488ead, type: 2}
-  - {fileID: 11400000, guid: 5be1a8194b013dc44aa28d1185780554, type: 2}
-  - {fileID: 11400000, guid: 5fd81727b2056a447bcf4560aaddd7a9, type: 2}
-  - {fileID: 11400000, guid: 06872d00d07d35c4d80f11f82c1b1c45, type: 2}
-  - {fileID: 11400000, guid: 43d287d0e15cd464383e67959b74acd5, type: 2}
-  - {fileID: 11400000, guid: 05d7a03f14e4e654ba7e0bd13254bd11, type: 2}
-  - {fileID: 11400000, guid: e71c552a1710a744385d65670f31a9bd, type: 2}
-  - {fileID: 11400000, guid: a768129ada4359645a51f760e5177bc9, type: 2}
-  - {fileID: 11400000, guid: f4cb03049107b564c941c5271aa43ea0, type: 2}
-  - {fileID: 11400000, guid: 00f79e2bb175556499f27f1f3b43a22c, type: 2}
+  - {fileID: 11400000, guid: f4e264b2c0fad9840841a96065337637, type: 2}
+  - {fileID: 11400000, guid: c54a955b4eda2264abbf56f100603610, type: 2}
+  - {fileID: 11400000, guid: 527292a19ce39414c868250e9ff10ee5, type: 2}
+  - {fileID: 11400000, guid: c7c07490fa53f5b4ba23cba5b76a7263, type: 2}
+  - {fileID: 11400000, guid: 83168b207642c28409e198a1c84eece6, type: 2}
+  - {fileID: 11400000, guid: 208db30eabbb7234da2a1fa98552166f, type: 2}
+  - {fileID: 11400000, guid: 07fa59262e9f7814593d36cc57b9f7ed, type: 2}
+  - {fileID: 11400000, guid: 94d0a137782cd4e4cb5517d4894c3095, type: 2}
+  - {fileID: 11400000, guid: 2c2676fcb080ac64aa5404439c1b616f, type: 2}
+  - {fileID: 11400000, guid: 95ec4453d41787840af119c629832676, type: 2}
+  - {fileID: 11400000, guid: ee2595772794f074e91e8703cbaedf08, type: 2}
+  - {fileID: 11400000, guid: 20d0789cfcaad28488c344e199ebd862, type: 2}
+  - {fileID: 11400000, guid: effebe4514ae5a442a393a937f0c142a, type: 2}
+  - {fileID: 11400000, guid: bd3ff06cb96a2c946b53354056294a57, type: 2}
+  - {fileID: 11400000, guid: b9a4913fbc2bfd048baac2788dd5c61a, type: 2}
+  - {fileID: 11400000, guid: 2a226d81a1039e64f969eaa2a777832e, type: 2}
+  - {fileID: 11400000, guid: 67a59da246dc77e4085ffa59888a93c1, type: 2}
+  - {fileID: 11400000, guid: d97f6535262887c4fb012138ec0eff19, type: 2}
+  - {fileID: 11400000, guid: 8f3d0e8431162704c93cb80b26c7c3af, type: 2}
+  - {fileID: 11400000, guid: eed918b36c07b584e9efb58439ec7122, type: 2}
+  - {fileID: 11400000, guid: 0294e811d2786b24b93d9df5969432bd, type: 2}
+  - {fileID: 11400000, guid: 2db89129620285a4892e25b92e7ae177, type: 2}
+  - {fileID: 11400000, guid: 517b28bc2564f01499eed4ee55efbee0, type: 2}
+  - {fileID: 11400000, guid: 06d6fba062ff66846971cc25dae38c4b, type: 2}
+  - {fileID: 11400000, guid: 48a78edf4d4846f45be5cda0be42fe13, type: 2}
+  - {fileID: 11400000, guid: 2a3f4bfd04d77714086942adcab4a554, type: 2}
+  - {fileID: 11400000, guid: 2f3d73d11a5ace24dbccdc4b9ffd6a4d, type: 2}
+  - {fileID: 11400000, guid: 1e8a6d1a50d846f4693e62da07eeb790, type: 2}
+  - {fileID: 11400000, guid: be6ed4454e188ce47aef962c4308ff6b, type: 2}
+  - {fileID: 11400000, guid: 32517916ef6a078478ad16ceca4faaf5, type: 2}
+  - {fileID: 11400000, guid: 4d59c517805d4b04e8ee08fa92783292, type: 2}
+  - {fileID: 11400000, guid: 694265e9afd51a041abc2e91f8708552, type: 2}
   m_highlightMap: {fileID: 873931279}
   m_PauseMenu: {fileID: 1432813238}
   m_EnemyPrefab: {fileID: 4097435655201817450, guid: 50fc94a9488545642971c165d594c21b,
