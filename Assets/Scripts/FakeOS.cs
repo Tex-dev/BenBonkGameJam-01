@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Manages file from outside of the game.
 /// </summary>
-public class FileManager : Singleton<FileManager>
+public class FakeOS : Singleton<FakeOS>
 {
     /// <summary>
     /// Process of the current file viewer.
@@ -104,6 +104,6 @@ public class FileManager : Singleton<FileManager>
     /// </summary>
     public void ResetFile()
     {
-        LevelManager.Instance.ResetLevelFile(LevelManager.CurrentLevel);
+        LevelManager.Instance.LoadLevel(LevelManager.CurrentLevel);
     }
 }

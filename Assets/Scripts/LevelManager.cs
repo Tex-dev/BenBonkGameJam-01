@@ -115,7 +115,7 @@ public class LevelManager : Singleton<LevelManager>
     /// Reset file for the specified level.
     /// </summary>
     /// <param name="level">Level to reset the file of.</param>
-    public void ResetLevelFile(int level)
+    public void LoadLevel(int level)
     {
         if (!File.Exists(Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini"))
         {
@@ -161,7 +161,7 @@ public class LevelManager : Singleton<LevelManager>
             else
                 GenerateLevelFromFile(Application.dataPath + $"/Resources/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
 
-            FileManager.Instance.CloseFile();
+            FakeOS.Instance.CloseFile();
         }
         else
             PlayerManager.Pause();
