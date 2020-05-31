@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody2D))]
@@ -50,6 +51,9 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     private bool m_IsGameStarted = false;
 
+    public Action OnPlay = null;
+    public Action OnPause = null;
+
     // HACK : this is not that good, but could be improved for clean pause system.
     //private Vector3 m_SavedPlayerVelocity = Vector3.zero;
     //private float m_SavedPlayerAngularVelocity = 0f;
@@ -60,7 +64,10 @@ public class PlayerManager : Singleton<PlayerManager>
     public static void Play()
     {
         if (!Instance.m_IsGameStarted)
+        {
             return;
+        }
+        Instance.OnPlay?.Invoke();
 
         Instance.m_IsPaused = false;
         Instance.m_animator.enabled = true;
@@ -82,7 +89,10 @@ public class PlayerManager : Singleton<PlayerManager>
     public static void Pause()
     {
         if (!Instance.m_IsGameStarted)
+        {
             return;
+        }
+        Instance.OnPause?.Invoke();
 
         Instance.m_IsPaused = true;
         Instance.m_animator.enabled = false;
@@ -143,11 +153,6 @@ public class PlayerManager : Singleton<PlayerManager>
 
         if (m_isGrounded = Physics2D.OverlapCircle(m_groundCheck.position, m_groundCheckRadius, m_collisionLayer))
             m_nbJump = m_nbJumpMax;
-    }
-
-    public void SetInitialPlayerPosition(Vector2 initialPosition)
-    {
-        m_rigidBody.transform.position = initialPosition;
     }
 
     private void MovePlayer(float p_horizontalMovement)

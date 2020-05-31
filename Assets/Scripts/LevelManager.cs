@@ -317,7 +317,9 @@ public class LevelManager : Singleton<LevelManager>
                         break;
 
                     case TilesType.SPAWN:
-                        PlayerManager.Instance.SetInitialPlayerPosition(new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f));
+                        PlayerManager.Instance.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
+
+                        // TODO : play spawn animation on new level load.
                         break;
 
                     case TilesType.DESTINATION:
