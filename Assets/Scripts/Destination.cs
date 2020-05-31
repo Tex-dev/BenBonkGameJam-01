@@ -6,6 +6,7 @@ public class Destination : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        LevelLogic.Instance.DestinationReached();
+        if(other.CompareTag("Player") && other is BoxCollider2D)
+            LevelLogic.Instance.DestinationReached();
     }
 }
