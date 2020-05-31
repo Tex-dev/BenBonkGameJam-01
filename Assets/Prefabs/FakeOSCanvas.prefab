@@ -842,12 +842,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '''F'' to open file
+  m_Text: '"F" to open file
 
-''        G'' to open folder
+    "G" to open folder
 
-''        H'' to reset
-    file'
+    "H" to reset level'
 --- !u!1 &363369601244475509
 GameObject:
   m_ObjectHideFlags: 0

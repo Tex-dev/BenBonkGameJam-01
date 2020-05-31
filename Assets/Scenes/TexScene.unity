@@ -278,16 +278,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: FakeOSCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 363369601241814977, guid: 0027ce346b363684cab20edbb35494ac,
-        type: 3}
-      propertyPath: m_Text
-      value: '''F'' to open file
-
-''        G'' to open folder
-
-''        H'' to
-        reset file'
-      objectReference: {fileID: 0}
     - target: {fileID: 363369601333469385, guid: 0027ce346b363684cab20edbb35494ac,
         type: 3}
       propertyPath: m_AnchorMin.y

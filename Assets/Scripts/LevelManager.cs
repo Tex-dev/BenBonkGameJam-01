@@ -15,8 +15,14 @@ internal enum TilesID : ushort
     LEFT = 8,
 }
 
+/// <summary>
+/// Manages level files.
+/// </summary>
 public class LevelManager : Singleton<LevelManager>
 {
+    /// <summary>
+    /// Type of the tile.
+    /// </summary>
     public enum TilesType : ushort
     {
         EMPTY,

@@ -17,6 +17,24 @@ public class FileManager : Singleton<FileManager>
     /// </summary>
     private System.Diagnostics.Process m_CurrentFolderViewProcess = null;
 
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            ClickFile();
+        }
+
+        if (Input.GetKeyUp(KeyCode.G))
+        {
+            ClickFolder();
+        }
+
+        if (Input.GetKeyUp(KeyCode.H))
+        {
+            ResetFile();
+        }
+    }
+
     /// <summary>
     /// Open file explorer from a specified path.
     /// </summary>
@@ -57,7 +75,7 @@ public class FileManager : Singleton<FileManager>
     {
         int currentLevel = LevelManager.CurrentLevel;
 
-        OpenFolder(Application.dataPath + $"/Resources/level_{currentLevel}/");
+        OpenFolder(Application.dataPath + $"/Resources/");
     }
 
     /// <summary>

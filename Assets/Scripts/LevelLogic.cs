@@ -2,9 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages logic of the levels system.
+/// </summary>
 public class LevelLogic : Singleton<LevelLogic>
 {
-    public void DestinationReached()
+    /// <summary>
+    /// Called on destination reach.
+    /// </summary>
+    public void OnDestinationReached()
     {
         PlayerManager.Pause();
 
