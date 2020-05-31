@@ -3,25 +3,29 @@
 public class EnemyManager : MonoBehaviour
 {
     [SerializeField]
-    private float m_speed   = 1;
+    private float m_speed = 1;
 
     [SerializeField]
     private bool m_isBounceInDamage = false;
 
     [SerializeField]
     private Transform[] m_waypoints = null;
+
     private Transform m_target;
     private int m_targetID;
 
     [SerializeField]
     private int m_damage = 10;
 
+    [SerializeField]
+    private Vector2 m_BounceVelocity = new Vector2(2000f, 80f);
+
     private bool m_isDead = false;
 
-    private SpriteRenderer  m_sprite;
-    private BoxCollider2D   m_collider;
+    private SpriteRenderer m_sprite;
+    private Collider2D m_collider;
 
-    static private Quaternion  s_onTheBack = new Quaternion(1.0f, 0.0f, 0.0f, 0.0f);
+    static private Quaternion s_onTheBack = new Quaternion(1.0f, 0.0f, 0.0f, 0.0f);
 
     private void Start()
     {
@@ -29,7 +33,7 @@ public class EnemyManager : MonoBehaviour
         m_target = m_waypoints[0];
 
         m_sprite = GetComponent<SpriteRenderer>();
-        m_collider = GetComponent<BoxCollider2D>();
+        m_collider = GetComponent<Collider2D>();
     }
 
     private void Update()
@@ -58,6 +62,12 @@ public class EnemyManager : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(m_damage, m_isBounceInDamage);
+
+            Rigidbody2D playerRigidbody = collision.gameObject.GetComponent<Rigidbody2D>();
+
+            float xVelocity = playerRigidbody.velocity.x;
+
+            playerRigidbody.AddForce(new Vector2(-Mathf.Sign(xVelocity) * m_BounceVelocity.x, m_BounceVelocity.y));
         }
     }
 
@@ -66,6 +76,4 @@ public class EnemyManager : MonoBehaviour
         m_isDead = true;
         m_collider.enabled = false;
     }
-
-
 }

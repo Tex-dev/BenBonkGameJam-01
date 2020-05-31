@@ -5,6 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [Header("Audio")]
+    public AudioClip OnHit = null;
+
+    public AudioClip OnJump = null;
+
+    public AudioClip OnDeath = null;
+
+    public AudioSource AudioSource = null;
+
+    [Header("Physic parameters")]
     [SerializeField]
     private float m_moveSpeed = 300f;
 
@@ -194,9 +204,12 @@ public class PlayerManager : Singleton<PlayerManager>
             m_spriteRenderer.flipX = true;
     }
 
-    public void Jump(float p_force)
+    public void Jump(float p_force, bool mute = false)
     {
         m_rigidBody.AddForce(new Vector2(0.0f, p_force));
+
+        if (!mute)
+            AudioSource.PlayOneShot(OnJump);
     }
 
     private void OnDrawGizmos()
