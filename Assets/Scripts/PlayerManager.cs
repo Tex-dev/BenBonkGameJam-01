@@ -30,6 +30,7 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField]
     private LayerMask m_collisionLayer = ~0;
 
+    [SerializeField]
     private Rigidbody2D m_rigidBody = null;
 
     private SpriteRenderer m_spriteRenderer = null;
@@ -164,12 +165,12 @@ public class PlayerManager : Singleton<PlayerManager>
             }
 
             Flip(m_rigidBody.velocity.x);
-
-            m_animator.SetFloat("speed", Mathf.Abs(m_rigidBody.velocity.x));
-            m_animator.SetFloat("verticalSpeed", m_rigidBody.velocity.y);
-            m_animator.SetBool("isGrounded", m_isGrounded);
-            m_animator.SetBool("isJumping", m_isJumping);
         }
+
+        m_animator.SetFloat("speed", Mathf.Abs(m_rigidBody.velocity.x));
+        m_animator.SetFloat("verticalSpeed", m_rigidBody.velocity.y);
+        m_animator.SetBool("isGrounded", m_isGrounded);
+        m_animator.SetBool("isJumping", m_isJumping);
     }
 
     /// <summary>
@@ -265,14 +266,14 @@ public class PlayerManager : Singleton<PlayerManager>
         Gizmos.DrawWireSphere(m_groundCheck.position, m_groundCheckRadius);
     }
 
-    private void EnableMovement()
+    public void EnableMovement()
     {
         m_canMove = true;
 
         m_rigidBody.gravityScale = 1;
     }
 
-    private void DisableMovement()
+    public void DisableMovement()
     {
         m_canMove = false;
 
