@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Security.Cryptography;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -134,7 +132,7 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         //TODO : pas sur de ça du tout
 
-//        m_spriteRenderer = GetComponent<SpriteRenderer>();
+        //        m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_animator = GetComponentInChildren<Animator>();
         m_rigidBody = GetComponent<Rigidbody2D>();
@@ -147,7 +145,6 @@ public class PlayerManager : Singleton<PlayerManager>
 
         LevelLogic.Instance.OnDestionationReached += () => PlayerAnimation(true);
         GetComponent<PlayerHealth>().OnDeath += Death;
-
     }
 
     /// <summary>

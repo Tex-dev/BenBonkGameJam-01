@@ -3,11 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class BlackHoleManager : MonoBehaviour
 {
-    private Animator        m_animator;
-    private bool            m_beginLevel;
+    private Animator m_animator;
+    private bool m_beginLevel;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         m_animator = GetComponent<Animator>();
 
@@ -24,8 +24,6 @@ public class BlackHoleManager : MonoBehaviour
     {
         if (!m_beginLevel)
         {
-            // TODO : Load new level
-            LevelManager.Instance.GoToNextLevel();
             int nextLevel = SceneManager.GetActiveScene().buildIndex + 1;
             if (nextLevel >= SceneManager.sceneCountInBuildSettings)
             {

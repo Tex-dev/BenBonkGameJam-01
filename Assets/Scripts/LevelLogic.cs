@@ -31,7 +31,6 @@ public class LevelLogic : Singleton<LevelLogic>
         OnDestionationReached?.Invoke();
 
         Debug.Log("Destination reached ! ");
-
     }
 
     public GameObject GetEndingBlackhole()

@@ -49,18 +49,27 @@ public class AudioManager : Singleton<AudioManager>
     /// </summary>
     private void Awake()
     {
+        DontDestroyOnLoad(this);
+
         // Play the main loop once the intros are done.
         m_ThemeLoop.PlayDelayed(m_Intro.clip.length);
         m_ThemeLoopPaused.PlayDelayed(m_Intro.clip.length);
-
-        PlayerManager.Instance.OnPause += PauseCallback;
-        PlayerManager.Instance.OnPlay += PlayCallback;
 
         m_Intro.volume = m_VolumeRange.y;
         m_ThemeLoop.volume = m_VolumeRange.y;
 
         m_IntroPaused.volume = m_VolumeRange.x;
         m_ThemeLoopPaused.volume = m_VolumeRange.x;
+    }
+
+    /// <summary>
+    /// Called by Unity on new level loaded.
+    /// </summary>
+    /// <param name="level">IF of the new level.</param>
+    private void OnLevelWasLoaded(int level)
+    {
+        PlayerManager.Instance.OnPause += PauseCallback;
+        PlayerManager.Instance.OnPlay += PlayCallback;
     }
 
     /// <summary>

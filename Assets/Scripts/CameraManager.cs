@@ -4,8 +4,10 @@ public class CameraManager : MonoBehaviour
 {
     [SerializeField]
     private Transform m_player = null;
+
     [SerializeField]
     private float m_timeOffset = 0.2f;
+
     [SerializeField]
     private Vector3 m_posOffset = Vector3.zero;
 
@@ -15,13 +17,24 @@ public class CameraManager : MonoBehaviour
 
     private bool m_followPlayer = true;
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
+    private void OnLevelWasLoaded(int level)
+    {
+        m_player = PlayerManager.Instance.transform;
+        m_playerRB = m_player.GetComponent<Rigidbody2D>();
+    }
+
     private void Start()
     {
         m_playerRB = m_player.GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (!m_followPlayer)
             return;
@@ -39,7 +52,6 @@ public class CameraManager : MonoBehaviour
             m_timeOffset = Mathf.Max(0.0f, -0.02f * (m_playerRB.velocity.magnitude - 20.0f));
         else
             m_timeOffset = 0.2f;
-
     }
 
     public void FollowPlayer(bool enable = true)

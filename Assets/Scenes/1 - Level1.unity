@@ -288,10 +288,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: '''F'' to open file
 
-''                                                                               
+''                                                                                       
         G'' to open folder
 
-''                                                                               
+''                                                                                       
         H'' to reset file'
       objectReference: {fileID: 0}
     - target: {fileID: 363369601333469385, guid: 0027ce346b363684cab20edbb35494ac,
@@ -654,7 +654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &715761367
 AudioListener:
   m_ObjectHideFlags: 0

@@ -156,6 +156,15 @@ public class LevelManager : Singleton<LevelManager>
     }
 
     /// <summary>
+    /// Called by Unity on new level loaded.
+    /// </summary>
+    /// <param name="level">ID of the new level.</param>
+    private void OnLevelWasLoaded(int level)
+    {
+        m_PauseMenu.SetActive(false);
+    }
+
+    /// <summary>
     /// Reset file for the specified level.
     /// </summary>
     /// <param name="level">Level to reset the file of.</param>
@@ -167,7 +176,7 @@ public class LevelManager : Singleton<LevelManager>
             File.Copy(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini", Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini");
         }
 
-        if(reloadOriginalFile)
+        if (reloadOriginalFile)
         {
             // Rewrite original file in player file
             List<string> originalLines = File.ReadLines(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini").ToList();
@@ -193,7 +202,7 @@ public class LevelManager : Singleton<LevelManager>
         else
             GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini", Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini", true, forceRespawn);//*/
 
-//        GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini");
+        //        GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini");
 
         m_CurrentLevel = level;
     }
@@ -623,7 +632,7 @@ public class LevelManager : Singleton<LevelManager>
 
         for (int i = 0; i < randomIDs.Length; i++)
             isTrapped[randomIDs[i]] = true;
-        
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)

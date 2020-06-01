@@ -17,6 +17,9 @@ public class FakeOS : Singleton<FakeOS>
     /// </summary>
     private System.Diagnostics.Process m_CurrentFolderViewProcess = null;
 
+    /// <summary>
+    /// Update is called once per frame by Unity.
+    /// </summary>
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.F))
