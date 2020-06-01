@@ -21,8 +21,6 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        print(m_timeOffset);
-
         transform.position = Vector3.SmoothDamp(transform.position, m_player.position + m_posOffset, ref m_velocity, m_timeOffset);
 
         if (Input.GetKeyDown(KeyCode.DownArrow))
