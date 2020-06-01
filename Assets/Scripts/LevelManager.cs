@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Data;
+using UnityEngine.UIElements;
 
 internal enum TilesID : ushort
 {
@@ -281,8 +283,24 @@ public class LevelManager : Singleton<LevelManager>
         // On déduit la taille du niveau en fonction des informations lues.
         h = lines.Length;
         w = 0;
-        foreach (string line in lines)
+        for (int i = 0; i < lines.Length; i++)
+        {
+            string[] words = lines[i].Split('\t');
+            string line = "";
+            int j;
+
+            for (j = 0; j < words.Length-1; j++)
+            {
+                line += words[j];
+
+                while (line.Length % 8 != 0)
+                    line += ' ';
+            }
+            line += words[j];
+            lines[i] = line;
+
             w = Mathf.Max(w, line.Length);
+        }
 
         width = Mathf.Max(width, w);
         height = Mathf.Max(height, h);

@@ -69,7 +69,7 @@ MonoBehaviour:
   OnJump: {fileID: 8300000, guid: b6e0f1d412eb91445b172503a8a5d5b5, type: 3}
   OnDeath: {fileID: 8300000, guid: bb8adffde1aa54d48a3cb330905cbdee, type: 3}
   Source: {fileID: 537273408992892608}
-  m_moveSpeed: 300
+  m_moveSpeed: 150
   m_jumpForce: 250
   m_groundCheck: {fileID: 537273409499022379}
   m_groundCheckRadius: 0.1
