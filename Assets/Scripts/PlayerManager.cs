@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Security.Cryptography;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -136,6 +138,8 @@ public class PlayerManager : Singleton<PlayerManager>
         m_nbJump = m_nbJumpMax;
 
         m_IsGameStarted = true;
+
+        LevelLogic.Instance.OnDestionationReached += () => PlayerAnimation(true);
     }
 
     /// <summary>
@@ -163,11 +167,11 @@ public class PlayerManager : Singleton<PlayerManager>
         }
 
         //TODO Thin to remove this
-        if (Input.GetKeyDown(KeyCode.R))
-            PlayerAnimation(true);
-
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            MinimizePlayer();
             PlayerAnimation(false);
+        }
     }
 
     /// <summary>
@@ -248,14 +252,19 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private IEnumerator SpiralAnimation(bool diminution)
     {
+        // Not initialise here bacause at the loading of the level LevelLogic is not instantiate
+        GameObject dest = null;
         bool isFInished = false;
 
         if (diminution)
         {
+            dest = LevelLogic.Instance.GetEndingBlackhole();
+
             while (m_spriteRenderer.transform.localScale.magnitude > 0.1f)
             {
                 m_spriteRenderer.transform.localScale = m_spriteRenderer.transform.localScale * 0.992f;
                 m_spriteRenderer.transform.Rotate(0.0f, 0.0f, 3.0f, Space.Self);
+                m_spriteRenderer.transform.position = Vector3.Lerp(m_spriteRenderer.transform.position, dest.transform.position, Time.deltaTime);
                 yield return 1;
             }
         }
@@ -263,6 +272,8 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             // Boolean to know if scale if finished and finish the turn of rotation;
             bool scaleOK = false;
+
+            dest = LevelManager.Instance.GetBeginningBlackhole();
 
             while (!isFInished)
             {
@@ -288,7 +299,16 @@ public class PlayerManager : Singleton<PlayerManager>
                 yield return 1;
             }
 
+            // Get just now because at the loading of the level LevelLogic is not instantiate
             EnableMovement();
         }
+
+        dest.GetComponent<BlackHoleManager>().Shrink();
+    }
+
+    public void MinimizePlayer()
+    {
+        m_spriteRenderer.transform.localScale = Vector3.one * 0.1f;
+        DisableMovement();
     }
 }

@@ -15,7 +15,7 @@ public class Destination : MonoBehaviour
     {
         if (other.CompareTag("Player") && other is BoxCollider2D)
         {
-            LevelLogic.Instance.OnDestinationReached();
+            LevelLogic.Instance.DestinationReached(transform);
             GetComponent<AudioSource>().Play();
         }
     }

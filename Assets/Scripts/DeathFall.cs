@@ -6,7 +6,7 @@ public class DeathFall : MonoBehaviour
     {
         if(collision.CompareTag("Player"))
         {
-            LevelManager.Instance.LoadLevel(LevelManager.CurrentLevel);
+            LevelManager.Instance.LoadLevel(LevelManager.CurrentLevel, false, true);
         }
     }
 }
