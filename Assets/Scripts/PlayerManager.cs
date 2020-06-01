@@ -57,12 +57,12 @@ public class PlayerManager : Singleton<PlayerManager>
     /// <summary>
     /// Is the game paused?
     /// </summary>
-    private bool m_IsPaused = false;
+    public bool IsPaused { get; private set; } = false;
 
     /// <summary>
     /// Is the game done starting.
     /// </summary>
-    private bool m_IsGameStarted = false;
+    public bool IsGameStarted { get; private set; } = false;
 
     /// <summary>
     /// Called when play mode is activated.
@@ -83,13 +83,13 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     public static void Play()
     {
-        if (!Instance.m_IsGameStarted)
+        if (!Instance.IsGameStarted)
         {
             return;
         }
         Instance.OnPlay?.Invoke();
 
-        Instance.m_IsPaused = false;
+        Instance.IsPaused = false;
         Instance.m_animator.enabled = true;
 
         Time.timeScale = 1f;
@@ -108,13 +108,13 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     public static void Pause()
     {
-        if (!Instance.m_IsGameStarted)
+        if (!Instance.IsGameStarted)
         {
             return;
         }
         Instance.OnPause?.Invoke();
 
-        Instance.m_IsPaused = true;
+        Instance.IsPaused = true;
         Instance.m_animator.enabled = false;
 
         Time.timeScale = 0f;
@@ -141,7 +141,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
         m_nbJump = m_nbJumpMax;
 
-        m_IsGameStarted = true;
+        IsGameStarted = true;
 
         LevelLogic.Instance.OnDestionationReached += () => PlayerAnimation(true);
         GetComponent<PlayerHealth>().OnDeath += Death;
@@ -152,7 +152,7 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     private void Update()
     {
-        if (!m_IsPaused && m_canMove)
+        if (!IsPaused && m_canMove)
         {
             m_horizontalMovement = Input.GetAxis("Horizontal") * m_moveSpeed * Time.fixedDeltaTime;
 
