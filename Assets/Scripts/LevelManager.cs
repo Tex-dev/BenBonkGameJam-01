@@ -351,11 +351,11 @@ public class LevelManager : Singleton<LevelManager>
                         default:
                             break;
                     }
-                }
+                }/*
                 else
                 {
                     map[i, height - 1 - j] = TilesType.EMPTY;
-                }
+                }//*/
             }
         }
     }
