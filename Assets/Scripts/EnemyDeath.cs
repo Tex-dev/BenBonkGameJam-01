@@ -14,7 +14,9 @@ public class EnemyDeath : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             if (Mathf.Abs(Vector2.Angle(collision.GetComponent<Rigidbody2D>().velocity, Vector2.down)) > 80f)
+            {
                 return;
+            }
 
             GetComponent<AudioSource>().Play();
 

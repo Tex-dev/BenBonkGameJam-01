@@ -66,9 +66,12 @@ public class EnemyManager : MonoBehaviour
 
             Rigidbody2D playerRigidbody = collision.gameObject.GetComponent<Rigidbody2D>();
 
-            float xVelocity = playerRigidbody.velocity.x;
+            Vector2 direction = playerRigidbody.position - new Vector2(transform.position.x, transform.position.y);
 
-            playerRigidbody.AddForce(new Vector2(-Mathf.Sign(xVelocity) * m_BounceVelocity.x, m_BounceVelocity.y));
+            if (Mathf.Abs(Vector2.Angle(direction, Vector2.left)) < 90f)
+                playerRigidbody.AddForce(new Vector2(-1 * m_BounceVelocity.x, m_BounceVelocity.y));
+            else
+                playerRigidbody.AddForce(new Vector2(m_BounceVelocity.x, m_BounceVelocity.y));
         }
     }
 
