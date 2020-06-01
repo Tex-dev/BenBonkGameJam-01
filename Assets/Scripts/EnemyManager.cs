@@ -61,7 +61,8 @@ public class EnemyManager : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(m_damage, m_isBounceInDamage);
+            if (!collision.gameObject.GetComponent<PlayerHealth>().TakeDamage(m_damage, m_isBounceInDamage))
+                return;
 
             Rigidbody2D playerRigidbody = collision.gameObject.GetComponent<Rigidbody2D>();
 

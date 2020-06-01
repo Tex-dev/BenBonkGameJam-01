@@ -11,9 +11,9 @@ public class UnphysicTilemapManager : MonoBehaviour
     float           m_sign;
     
     [SerializeField]
-    Vector2         m_speedBorder;
+    Vector2         m_speedBorder = Vector2.up;
     [SerializeField]
-    Vector2         m_alphaBorder;
+    Vector2         m_alphaBorder = Vector2.up;
 
     private void Start()
     {

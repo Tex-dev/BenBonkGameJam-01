@@ -21,7 +21,6 @@ public class BlackHoleManager : MonoBehaviour
 
     public void EndShrinkAnimation()
     {
-        print("End blackhole shrink");
         if (!m_beginLevel)
         {
             // Load new level
@@ -31,7 +30,6 @@ public class BlackHoleManager : MonoBehaviour
 
     public void EndGrowAnimation()
     {
-        print("End blackhole grow");
         if (m_beginLevel)
         {
             PlayerManager.Instance.PlayerAnimation(false);

@@ -62,7 +62,7 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     /// <param name="damage">Damage value to apply to the player.</param>
     /// <param name="shouldBounce">Should the player bounce off the enemy?</param>
-    public void TakeDamage(int damage, bool shouldBounce)
+    public bool TakeDamage(int damage, bool shouldBounce)
     {
         if (!m_isInvisible)
         {
@@ -76,6 +76,8 @@ public class PlayerHealth : MonoBehaviour
 
             PlayerManager.Instance.Source.PlayOneShot(PlayerManager.Instance.OnHit);
         }
+
+        return m_health > 0;
     }
 
     /// <summary>

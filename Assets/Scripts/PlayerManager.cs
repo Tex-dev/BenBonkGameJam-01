@@ -52,9 +52,6 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField]
     private int m_nbJump = 0;
 
-    [SerializeField]
-    private GameObject m_wings;
-
     private Animator m_animator = null;
 
     private IEnumerator m_coroutineAnim = null;
@@ -213,7 +210,6 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void Jump(float p_force, bool mute = false)
     {
-        print("coucou");
         m_rigidBody.AddForce(new Vector2(0.0f, p_force));
 
         if (!mute)
@@ -223,7 +219,6 @@ public class PlayerManager : Singleton<PlayerManager>
     private void Death()
     {
         Source.PlayOneShot(OnDeath);
-        m_wings.SetActive(true);
         m_animator.SetBool("isDead", true);
 
         Collider2D[] colliders = GetComponents<Collider2D>();
@@ -232,21 +227,23 @@ public class PlayerManager : Singleton<PlayerManager>
 
         GetComponent<PlayerHealth>().ForceStopInvisibility();
 
+        //*
         m_rigidBody.gravityScale = 0;
-        m_rigidBody.velocity = Vector2.up;
+        m_rigidBody.velocity = Vector2.zero;//*/
 
         m_cameraManager.FollowPlayer(false);
 
+//        DisableMovement();
 
-        CoroutineManager.Delay(() => LevelManager.Instance.LoadLevel(LevelManager.CurrentLevel, false, true), 1.8f);
-        CoroutineManager.Delay(DisableMovement, 1.8f);
-        CoroutineManager.Delay(EnableMovement, 2.5f);
+        CoroutineManager.Delay(() => { m_rigidBody.velocity = Vector2.up; }, 1.0f);
+        CoroutineManager.Delay(() => LevelManager.Instance.LoadLevel(LevelManager.CurrentLevel, false, true), 2.5f);
+        CoroutineManager.Delay(DisableMovement, 2.5f);
+        CoroutineManager.Delay(EnableMovement, 3.5f);
     }
 
     public void Respawn()
     {
         GetComponent<PlayerHealth>().Respawn();
-        m_wings.SetActive(false);
         m_animator.SetBool("isDead", false);
 
         Collider2D[] colliders = GetComponents<Collider2D>();
