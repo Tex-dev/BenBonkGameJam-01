@@ -1204,6 +1204,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TitleScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 702797269137473565, guid: 445af0ebfb002ca44952c6dbbcedc2a1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 445af0ebfb002ca44952c6dbbcedc2a1, type: 3}
 --- !u!1001 &1820103295777444676
