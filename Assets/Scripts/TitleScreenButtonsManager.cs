@@ -1,32 +1,64 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TitleScreenButtonsManager : MonoBehaviour
 {
+    /// <summary>
+    /// New game button.
+    /// </summary>
     [SerializeField]
     private Button m_NewGameButton = null;
 
+    /// <summary>
+    /// Continue button.
+    /// </summary>
     [SerializeField]
     private Button m_ContinueButton = null;
 
-    // Start is called before the first frame update
+    /// <summary>
+    /// Is continue available.
+    /// </summary>
+    private bool m_ContinueAvailable => Directory.Exists(Application.dataPath + "/Resources/level_0/");
+
+    /// <summary>
+    /// Start is called by Unity after initialization.
+    /// </summary>
     private void Start()
     {
-        if (Directory.Exists(Application.dataPath + $"/Resources/level_0/"))
-        {
-            m_ContinueButton.interactable = true;
+        m_NewGameButton.onClick.AddListener(ResetGame);
+        m_ContinueButton.onClick.AddListener(ContinueGame);
 
-            // TODO : connect features here
-            m_NewGameButton.onClick.AddListener(() => LevelManager.Instance.LoadLevel(0, true));
-            m_ContinueButton.onClick.AddListener(() => LevelManager.Instance.LoadLevel(0, false));
+        if (m_ContinueAvailable)
+        {
+            m_ContinueButton.gameObject.SetActive(true);
         }
         else
         {
-            m_NewGameButton.onClick.AddListener(() => LevelManager.Instance.LoadLevel(0, true));
-            m_ContinueButton.interactable = false;
+            m_ContinueButton.gameObject.SetActive(false);
         }
+    }
+
+    /// <summary>
+    /// Resets the game.
+    /// </summary>
+    private void ResetGame()
+    {
+        if (m_ContinueAvailable)
+            Directory.Delete(Application.dataPath + "/Resources/", true);
+        SceneManager.LoadScene(1);
+    }
+
+    /// <summary>
+    /// Resume the game to the last level load.
+    /// </summary>
+    private void ContinueGame()
+    {
+        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(Directory.GetDirectories(Application.dataPath + "/Resources/").Length);
     }
 }
