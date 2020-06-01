@@ -101,12 +101,8 @@ public class LevelManager : Singleton<LevelManager>
     /// <summary>
     /// Current level ID.
     /// </summary>
+    [SerializeField]
     private int m_CurrentLevel = 0;
-
-    /// <summary>
-    /// Is the current loading the first load of the scene?
-    /// </summary>
-    private bool m_IsInitialLevelLoading = true;
 
     /// <summary>
     /// Number max of block can be in the level
@@ -146,8 +142,12 @@ public class LevelManager : Singleton<LevelManager>
         }
 
         GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
-        m_beginningBlackhole = Instantiate(m_blackholePrefab, m_spawnPosition + new Vector3(0.5f, 0.5f), Quaternion.identity);
-        m_beginningBlackhole.GetComponent<BlackHoleManager>().BeginLevel(true);
+
+        if (m_CurrentLevel > 0)
+        {
+            m_beginningBlackhole = Instantiate(m_blackholePrefab, m_spawnPosition + new Vector3(0.5f, 0.5f), Quaternion.identity);
+            m_beginningBlackhole.GetComponent<BlackHoleManager>().BeginLevel(true);
+        }
     }
 
     /// <summary>
@@ -162,7 +162,7 @@ public class LevelManager : Singleton<LevelManager>
             File.Copy(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini", Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini");
         }
 
-        if(reloadOriginalFile)
+        if (reloadOriginalFile)
         {
             // Rewrite original file in player file
             List<string> originalLines = File.ReadLines(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini").ToList();
@@ -188,7 +188,7 @@ public class LevelManager : Singleton<LevelManager>
         else
             GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini", Application.dataPath + $"/Resources/level_{level}/level_{level}_blocks.ini", true, forceRespawn);//*/
 
-//        GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini");
+        //        GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{level}/level_{level}_blocks.ini");
 
         m_CurrentLevel = level;
     }
@@ -247,197 +247,6 @@ public class LevelManager : Singleton<LevelManager>
         //////////////////////////////////////////////////////////////
         DrawLevel(width, height, map, levelTiles, resetOnlyBlocks, forceRespawn);
     }
-
-    /*
-    /// <summary>
-    /// Generate the level from a specified path.
-    /// </summary>
-    /// <param name="levelFilePath">PAth of the level file.</param>
-    public void GenerateLevelFromFile(string originalLevelFilePath, string playerLevelFilePath)
-    {
-        Vector3Int currentCell;
-        StreamReader reader;
-        string originalContent, playerContent;
-        int nbPossiblebloc = m_highlightTile.Length / 16;
-
-        // Tableaux représentant le niveaux.
-        int[,] levelTiles;          // Chaque case contient l'indice de la tile qu'elle contient.
-
-        TilesType[,] map;           // Chaque case contient le type de bloc qu'elle contient.
-
-        // 1°) Extraction des informations du fichier de config
-        //////////////////////////////////////////////////////////////
-
-        reader = new StreamReader(originalLevelFilePath);
-        originalContent = reader.ReadToEnd();
-        reader.Close();
-
-        reader = new StreamReader(playerLevelFilePath);
-        playerContent = reader.ReadToEnd();
-        reader.Close();
-
-        // On supprime les potentiels saut de ligne en fin de fichier.
-        while (originalContent.EndsWith("\n") || originalContent.EndsWith("\r"))
-            originalContent = originalContent.Remove(originalContent.Length - 1);
-
-        while (playerContent.EndsWith("\n") || playerContent.EndsWith("\r"))
-            playerContent = playerContent.Remove(playerContent.Length - 1);
-
-        string[] lines = content.Split('\n');
-        for (int i = 0; i < lines.Length; i++)
-        {
-            if (lines[i].EndsWith("\r"))
-                lines[i] = lines[i].Remove(lines[i].Length - 1);
-        }
-
-        string[] lines = content.Split('\n');
-        for (int i = 0; i < lines.Length; i++)
-        {
-            if (lines[i].EndsWith("\r"))
-                lines[i] = lines[i].Remove(lines[i].Length - 1);
-        }
-
-        // On déduit la taille du niveau en fonction des informations lues.
-        int height = lines.Length;
-        int width = 0;
-        foreach (string line in lines)
-            width = Mathf.Max(width, line.Length);
-
-        levelTiles = new int[width, height];
-        map = new TilesType[width, height];
-
-        // 2°) Chargement du niveau à partir du fichier
-        //////////////////////////////////////////////////////////////
-
-        // Boucle permettant de savoir s'il y a ou pas une tile sur la case.
-        for (int j = 0; j < height; j++)
-        {
-            for (int i = 0; i < width; i++)
-            {
-                if (i < lines[j].Length)
-                {
-                    switch (lines[j][i])
-                    {
-                        case ' ':
-                            map[i, height - 1 - j] = TilesType.EMPTY;
-                            break;
-
-                        case '*':
-                            map[i, height - 1 - j] = TilesType.BLOCK;
-                            break;
-
-                        case 's':
-                            map[i, height - 1 - j] = TilesType.SPAWN;
-                            break;
-
-                        case 'd':
-                            map[i, height - 1 - j] = TilesType.DESTINATION;
-                            break;
-
-                        case 'e':
-                            map[i, height - 1 - j] = TilesType.ENEMY;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    map[i, height - 1 - j] = TilesType.EMPTY;
-                }
-            }
-        }
-
-        // Boucle afin d'affecter la bonne tuile à chaque case (dépendant des voisins).
-        for (int i = 0; i < width; i++)
-        {
-            for (int j = 0; j < height; j++)
-            {
-                if (map[i, j] == TilesType.BLOCK)
-                {
-                    int tileID = 0;
-
-                    // UP
-                    if (j < height - 1 && map[i, j + 1] == TilesType.BLOCK)
-                        tileID += (int)TilesID.UP;
-
-                    // DOWN
-                    if (j > 0 && map[i, j - 1] == TilesType.BLOCK)
-                        tileID += (int)TilesID.DOWN;
-
-                    // RIGHT
-                    if (i < width - 1 && map[i + 1, j] == TilesType.BLOCK)
-                        tileID += (int)TilesID.RIGHT;
-
-                    // LEFT
-                    if (i > 0 && map[i - 1, j] == TilesType.BLOCK)
-                        tileID += (int)TilesID.LEFT;
-
-                    levelTiles[i, j] = tileID;
-                }
-            }
-        }
-
-        // 3°) Affichage des tuiles à l'écran
-        //////////////////////////////////////////////////////////////
-
-        currentCell = new Vector3Int(0, 0, 0);
-
-        // On efface l'écran (on enlève les anciennes tuiles).
-        for (currentCell.x = 0; currentCell.x < 50; currentCell.x++)
-        {
-            for (currentCell.y = 0; currentCell.y < 200; currentCell.y++)
-                m_highlightMap.SetTile(currentCell, null);
-        }
-
-        // Boucle permettant l'affichage des tuiles.
-        for (currentCell.x = 0; currentCell.x < width; (currentCell.x)++)
-        {
-            for (currentCell.y = 0; currentCell.y < height; (currentCell.y)++)
-            {
-                switch (map[currentCell.x, currentCell.y])
-                {
-                    case TilesType.EMPTY:
-                        m_highlightMap.SetTile(currentCell, null);
-                        break;
-
-                    case TilesType.BLOCK:
-                        {
-                            int idTile;
-                            int rand = Random.Range(0, nbPossiblebloc);
-                            idTile = rand * 16 + levelTiles[currentCell.x, currentCell.y];
-
-                            m_highlightMap.SetTile(currentCell, m_highlightTile[idTile]);
-                            break;
-                        }
-
-                    case TilesType.ENEMY:
-                        GameObject enemy = Instantiate(m_EnemyPrefab);
-                        enemy.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
-
-                        m_SpawnedItems.Add(enemy);
-                        break;
-
-                    case TilesType.SPAWN:
-                        PlayerManager.Instance.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
-
-                        // TODO : play spawn animation on new level load.
-                        break;
-
-                    case TilesType.DESTINATION:
-                        GameObject flag = Instantiate(m_FlagPrefab);
-                        flag.transform.position = new Vector2(currentCell.x + 0.48f, currentCell.y + 0.48f);
-
-                        m_SpawnedItems.Add(flag);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-    }//*/
 
     /// <summary>
     /// This function extract informations from config file to have the width and the height of the level
@@ -619,7 +428,7 @@ public class LevelManager : Singleton<LevelManager>
 
         for (int i = 0; i < randomIDs.Length; i++)
             isTrapped[randomIDs[i]] = true;
-        
+
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -692,7 +501,7 @@ public class LevelManager : Singleton<LevelManager>
                         if (!resetOnlyBlocks)
                         {
                             GameObject enemy = Instantiate(m_EnemyPrefab);
-                            enemy.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
+                            enemy.transform.position = m_physicTilemap.GetCellCenterWorld(currentCell);
 
                             m_SpawnedItems.Add(enemy);
                         }
@@ -701,19 +510,18 @@ public class LevelManager : Singleton<LevelManager>
                     case TilesType.SPAWN:
                         if (forceRespawn || !resetOnlyBlocks)
                         {
-                            PlayerManager.Instance.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
+                            PlayerManager.Instance.transform.position = m_physicTilemap.GetCellCenterWorld(currentCell);
                             PlayerManager.Instance.Respawn();
                         }
 
-                        // TODO : play spawn animation on new level load.
                         break;
 
                     case TilesType.DESTINATION:
                         if (!resetOnlyBlocks)
                         {
                             GameObject flag = Instantiate(m_FlagPrefab);
-                            flag.transform.position = new Vector2(currentCell.x + 0.24f, currentCell.y + 0.48f);
 
+                            flag.transform.position = m_physicTilemap.GetCellCenterWorld(currentCell);
                             m_SpawnedItems.Add(flag);
                         }
                         break;
@@ -728,5 +536,10 @@ public class LevelManager : Singleton<LevelManager>
     public GameObject GetBeginningBlackhole()
     {
         return m_beginningBlackhole;
+    }
+
+    public void GoToNextLevel()
+    {
+        m_CurrentLevel++;
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Manages the background music audio sources.
@@ -49,18 +50,30 @@ public class AudioManager : Singleton<AudioManager>
     /// </summary>
     private void Awake()
     {
+        //DontDestroyOnLoad(this);
+
         // Play the main loop once the intros are done.
         m_ThemeLoop.PlayDelayed(m_Intro.clip.length);
         m_ThemeLoopPaused.PlayDelayed(m_Intro.clip.length);
-
-        PlayerManager.Instance.OnPause += PauseCallback;
-        PlayerManager.Instance.OnPlay += PlayCallback;
 
         m_Intro.volume = m_VolumeRange.y;
         m_ThemeLoop.volume = m_VolumeRange.y;
 
         m_IntroPaused.volume = m_VolumeRange.x;
         m_ThemeLoopPaused.volume = m_VolumeRange.x;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    /// <summary>
+    /// Called when the scene is  loaded.
+    /// </summary>
+    /// <param name="scene">Loaded scene.</param>
+    /// <param name="mode">Scene loading mode.</param>
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        PlayerManager.Instance.OnPause += PauseCallback;
+        PlayerManager.Instance.OnPlay += PlayCallback;
     }
 
     /// <summary>

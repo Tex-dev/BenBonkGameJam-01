@@ -543,8 +543,8 @@ MonoBehaviour:
     type: 3}
   m_blackholePrefab: {fileID: 4491000097333041710, guid: 4d762fbf487b49f45879f46e1794ab0d,
     type: 3}
-  m_CurrentLevel: 0
-  m_maxBlockPossible: 200
+  m_CurrentLevel: 1
+  m_maxBlockPossible: 50
 --- !u!4 &489646026
 Transform:
   m_ObjectHideFlags: 0
@@ -638,7 +638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &715761367
 AudioListener:
   m_ObjectHideFlags: 0

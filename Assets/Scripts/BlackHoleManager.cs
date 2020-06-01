@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BlackHoleManager : MonoBehaviour
 {
-    private Animator        m_animator;
-    private bool            m_beginLevel;
+    private Animator m_animator;
+    private bool m_beginLevel;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         m_animator = GetComponent<Animator>();
 
@@ -23,7 +24,13 @@ public class BlackHoleManager : MonoBehaviour
     {
         if (!m_beginLevel)
         {
-            // Load new level
+            int nextLevel = SceneManager.GetActiveScene().buildIndex + 1;
+            if (nextLevel >= SceneManager.sceneCountInBuildSettings)
+            {
+                Application.OpenURL("https://cayugatribune.wixsite.com/welcometotheinternet");
+            }
+            else
+                SceneManager.LoadScene(nextLevel);
         }
         Destroy(gameObject);
     }

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/TexScene.unity
-    guid: 0f39f116876b05641b1490cdbc0d0152
+    path: Assets/Scenes/0 - Tutorial.unity
+    guid: 58c7b5bc099a04e47949a6eb8ce93875
+  - enabled: 1
+    path: Assets/Scenes/1 - Level1.unity
+    guid: 31038fd6116f02647a618ed91c4a12e7
   m_configObjects: {}

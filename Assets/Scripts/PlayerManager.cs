@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Security.Cryptography;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -132,7 +130,9 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     private void Awake()
     {
-//        m_spriteRenderer = GetComponent<SpriteRenderer>();
+        //TODO : pas sur de ça du tout
+
+        //        m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_animator = GetComponentInChildren<Animator>();
         m_rigidBody = GetComponent<Rigidbody2D>();
@@ -145,7 +145,6 @@ public class PlayerManager : Singleton<PlayerManager>
 
         LevelLogic.Instance.OnDestionationReached += () => PlayerAnimation(true);
         GetComponent<PlayerHealth>().OnDeath += Death;
-
     }
 
     /// <summary>
@@ -231,9 +230,11 @@ public class PlayerManager : Singleton<PlayerManager>
         m_rigidBody.gravityScale = 0;
         m_rigidBody.velocity = Vector2.zero;//*/
 
+        m_spriteRenderer.color = new Color(m_spriteRenderer.color.r, m_spriteRenderer.color.g, m_spriteRenderer.color.b, 0.25f);
+
         m_cameraManager.FollowPlayer(false);
 
-//        DisableMovement();
+        DisableMovement();
 
         CoroutineManager.Delay(() => { m_rigidBody.velocity = Vector2.up; }, 1.0f);
         CoroutineManager.Delay(() => LevelManager.Instance.LoadLevel(LevelManager.CurrentLevel, false, true), 2.5f);
@@ -250,8 +251,10 @@ public class PlayerManager : Singleton<PlayerManager>
         foreach (Collider2D collider in colliders)
             collider.enabled = true;
 
- //       m_rigidBody.gravityScale = 1;
- //       m_rigidBody.velocity = Vector2.zero;
+        m_spriteRenderer.color = new Color(m_spriteRenderer.color.r, m_spriteRenderer.color.g, m_spriteRenderer.color.b, 1.0f);
+
+        //       m_rigidBody.gravityScale = 1;
+        //       m_rigidBody.velocity = Vector2.zero;
 
         m_cameraManager.FollowPlayer();
     }
