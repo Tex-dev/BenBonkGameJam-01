@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_healthBar: {fileID: 0}
   m_invisibilityFramesDelay: 0.1
-  m_invisibilityDelay: 2
+  m_invisibilityDelay: 1.5
 --- !u!114 &537273408543813359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,7 +68,7 @@ MonoBehaviour:
   OnHit: {fileID: 8300000, guid: 6b33bde4ee217b74aa5caf1257aed3f7, type: 3}
   OnJump: {fileID: 8300000, guid: b6e0f1d412eb91445b172503a8a5d5b5, type: 3}
   OnDeath: {fileID: 8300000, guid: bb8adffde1aa54d48a3cb330905cbdee, type: 3}
-  AudioSource: {fileID: 537273408992892608}
+  Source: {fileID: 537273408992892608}
   m_moveSpeed: 300
   m_jumpForce: 250
   m_groundCheck: {fileID: 537273409499022379}
@@ -211,7 +211,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 3547802000633301516, guid: 2983c7c2c367fb44196328ee8e82733f,
     type: 3}
   m_Color: {r: 0.41585082, g: 0.9355934, b: 0.990566, a: 1}
@@ -380,7 +380,7 @@ GameObject:
   m_Component:
   - component: {fileID: 537273409499022379}
   m_Layer: 8
-  m_Name: GroundCHack
+  m_Name: GroundCheck
   m_TagString: Player
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0

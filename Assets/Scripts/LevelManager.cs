@@ -27,6 +27,7 @@ public class LevelManager : Singleton<LevelManager>
         EMPTY,
         BLOCK,
         UNMOVEABLE_BLOCK,
+        TRAPPED_BLOCK,
         ENEMY,
         SPAWN,
         DESTINATION,
@@ -110,6 +111,7 @@ public class LevelManager : Singleton<LevelManager>
     /// <summary>
     /// Number max of block can be in the level
     /// </summary>
+    [SerializeField]
     private int m_maxBlockPossible;
 
     public int MaxBlockPossible { get => m_maxBlockPossible; private set => m_maxBlockPossible = value; }
@@ -238,6 +240,8 @@ public class LevelManager : Singleton<LevelManager>
         LoadOtherMap(fileLinesOther, width, height, ref map);
 
         LoadTilesFromMap(width, height, map, out levelTiles);
+
+        VerifyNbBlockUsed(width, height, map);
 
         // 3°) Affichage des tuiles à l'écran
         //////////////////////////////////////////////////////////////
@@ -588,6 +592,49 @@ public class LevelManager : Singleton<LevelManager>
         }
     }
 
+    private void VerifyNbBlockUsed(int width, int height, TilesType[,] map)
+    {
+        int index = 0;
+        int[] randomIDs;
+        bool[] isTrapped;
+        m_nbBlockUsed = 0;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (map[x, y] == TilesType.BLOCK)
+                    m_nbBlockUsed++;
+            }
+        }
+
+        if (m_nbBlockUsed < m_maxBlockPossible)
+            return;
+
+        randomIDs = Utils.GenerateListRandomNUmber(0, m_nbBlockUsed, m_nbBlockUsed - m_maxBlockPossible);
+        isTrapped = new bool[m_nbBlockUsed];
+
+        for (int i = 0; i < m_nbBlockUsed; i++)
+            isTrapped[i] = false;
+
+        for (int i = 0; i < randomIDs.Length; i++)
+            isTrapped[randomIDs[i]] = true;
+        
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (map[x, y] == TilesType.BLOCK)
+                {
+                    if (isTrapped[index])
+                        map[x, y] = TilesType.TRAPPED_BLOCK;
+
+                    index++;
+                }
+            }
+        }
+    }
+
     private void DrawLevel(int width, int height, TilesType[,] map, int[,] levelTiles, bool resetOnlyBlocks, bool forceRespawn)
     {
         int nbPossiblebloc = m_blockTiles.Length / 16;
@@ -631,6 +678,16 @@ public class LevelManager : Singleton<LevelManager>
                             break;
                         }
 
+                    case TilesType.TRAPPED_BLOCK:
+                        {
+                            int idTile;
+                            int rand = Random.Range(0, nbPossiblebloc);
+                            idTile = rand * 16 + levelTiles[currentCell.x, currentCell.y];
+
+                            m_unphysicTilemap.SetTile(currentCell, m_blockTiles[idTile]);
+                            break;
+                        }
+
                     case TilesType.ENEMY:
                         if (!resetOnlyBlocks)
                         {
@@ -642,8 +699,11 @@ public class LevelManager : Singleton<LevelManager>
                         break;
 
                     case TilesType.SPAWN:
-                        if(forceRespawn || !resetOnlyBlocks)
+                        if (forceRespawn || !resetOnlyBlocks)
+                        {
                             PlayerManager.Instance.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
+                            PlayerManager.Instance.Respawn();
+                        }
 
                         // TODO : play spawn animation on new level load.
                         break;

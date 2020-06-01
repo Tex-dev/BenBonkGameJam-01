@@ -27,6 +27,10 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     public Action OnDeath = null;
 
+    private bool m_isDead = false;
+
+    private IEnumerator m_coroutine;
+
     /// <summary>
     /// Awake is called by Unity at initialization.
     /// </summary>
@@ -38,7 +42,7 @@ public class PlayerHealth : MonoBehaviour
         m_graphics = GetComponentInChildren<SpriteRenderer>();
         m_rigidbody2D = GetComponent<Rigidbody2D>();
 
-        OnDeath += () => PlayerManager.Instance.AudioSource.PlayOneShot(PlayerManager.Instance.OnDeath);
+//        OnDeath += () => PlayerManager.Instance.AudioSource.PlayOneShot(PlayerManager.Instance.OnDeath);
     }
 
     /// <summary>
@@ -46,9 +50,10 @@ public class PlayerHealth : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        if (m_health <= 0)
+        if (m_health <= 0 && !m_isDead)
         {
             OnDeath?.Invoke();
+            m_isDead = true;
         }
     }
 
@@ -66,9 +71,10 @@ public class PlayerHealth : MonoBehaviour
 
             m_isInvisible = true;
 
-            StartCoroutine(InvisibilityFrames());
+            m_coroutine = InvisibilityFrames();
+            StartCoroutine(m_coroutine);
 
-            PlayerManager.Instance.AudioSource.PlayOneShot(PlayerManager.Instance.OnHit);
+            PlayerManager.Instance.Source.PlayOneShot(PlayerManager.Instance.OnHit);
         }
     }
 
@@ -91,6 +97,21 @@ public class PlayerHealth : MonoBehaviour
             yield return new WaitForSeconds(m_invisibilityFramesDelay);
         }
 
+        m_isInvisible = false;
+    }
+
+    public void Respawn()
+    {
+        m_health = m_maxHealth;
+        m_healthBar.SetHealth(m_health);
+
+        m_isDead = false;
+    }
+
+    public void ForceStopInvisibility()
+    {
+        StopCoroutine(m_coroutine);
+        m_graphics.color = new Color(m_graphics.color.r, m_graphics.color.g, m_graphics.color.b, 1.0f);
         m_isInvisible = false;
     }
 }

@@ -14,7 +14,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public AudioClip OnDeath = null;
 
-    public AudioSource AudioSource = null;
+    public AudioSource Source = null;
 
     [Header("Physic parameters")]
     [SerializeField]
@@ -36,6 +36,8 @@ public class PlayerManager : Singleton<PlayerManager>
 
     private SpriteRenderer m_spriteRenderer = null;
 
+    private CameraManager m_cameraManager;
+
     private Vector2 m_velocity = Vector2.zero;
 
     private bool m_isJumping = false;
@@ -49,6 +51,9 @@ public class PlayerManager : Singleton<PlayerManager>
 
     [SerializeField]
     private int m_nbJump = 0;
+
+    [SerializeField]
+    private GameObject m_wings;
 
     private Animator m_animator = null;
 
@@ -130,16 +135,20 @@ public class PlayerManager : Singleton<PlayerManager>
     /// </summary>
     private void Awake()
     {
-        //        m_spriteRenderer = GetComponent<SpriteRenderer>();
+//        m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         m_animator = GetComponentInChildren<Animator>();
         m_rigidBody = GetComponent<Rigidbody2D>();
+
+        m_cameraManager = Camera.main.GetComponent<CameraManager>();
 
         m_nbJump = m_nbJumpMax;
 
         m_IsGameStarted = true;
 
         LevelLogic.Instance.OnDestionationReached += () => PlayerAnimation(true);
+        GetComponent<PlayerHealth>().OnDeath += Death;
+
     }
 
     /// <summary>
@@ -164,13 +173,6 @@ public class PlayerManager : Singleton<PlayerManager>
             m_animator.SetFloat("verticalSpeed", m_rigidBody.velocity.y);
             m_animator.SetBool("isGrounded", m_isGrounded);
             m_animator.SetBool("isJumping", m_isJumping);
-        }
-
-        //TODO Thin to remove this
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            MinimizePlayer();
-            PlayerAnimation(false);
         }
     }
 
@@ -211,10 +213,50 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void Jump(float p_force, bool mute = false)
     {
+        print("coucou");
         m_rigidBody.AddForce(new Vector2(0.0f, p_force));
 
         if (!mute)
-            AudioSource.PlayOneShot(OnJump);
+            Source.PlayOneShot(OnJump);
+    }
+
+    private void Death()
+    {
+        Source.PlayOneShot(OnDeath);
+        m_wings.SetActive(true);
+        m_animator.SetBool("isDead", true);
+
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in colliders)
+            collider.enabled = false;
+
+        GetComponent<PlayerHealth>().ForceStopInvisibility();
+
+        m_rigidBody.gravityScale = 0;
+        m_rigidBody.velocity = Vector2.up;
+
+        m_cameraManager.FollowPlayer(false);
+
+
+        CoroutineManager.Delay(() => LevelManager.Instance.LoadLevel(LevelManager.CurrentLevel, false, true), 1.8f);
+        CoroutineManager.Delay(DisableMovement, 1.8f);
+        CoroutineManager.Delay(EnableMovement, 2.5f);
+    }
+
+    public void Respawn()
+    {
+        GetComponent<PlayerHealth>().Respawn();
+        m_wings.SetActive(false);
+        m_animator.SetBool("isDead", false);
+
+        Collider2D[] colliders = GetComponents<Collider2D>();
+        foreach (Collider2D collider in colliders)
+            collider.enabled = true;
+
+ //       m_rigidBody.gravityScale = 1;
+ //       m_rigidBody.velocity = Vector2.zero;
+
+        m_cameraManager.FollowPlayer();
     }
 
     private void OnDrawGizmos()

@@ -82,7 +82,7 @@ MonoBehaviour:
   m_waypoints:
   - {fileID: 7668564350735966089}
   - {fileID: 2271283424066672467}
-  m_damage: 10
+  m_damage: 100
   m_BounceVelocity: {x: 2000, y: 80}
 --- !u!212 &4097435653694058520
 SpriteRenderer:
