@@ -288,10 +288,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: '''F'' to open file
 
-''                                                                       
+''                                                                               
         G'' to open folder
 
-''                                                                       
+''                                                                               
         H'' to reset file'
       objectReference: {fileID: 0}
     - target: {fileID: 363369601333469385, guid: 0027ce346b363684cab20edbb35494ac,
@@ -559,6 +559,7 @@ MonoBehaviour:
     type: 3}
   m_blackholePrefab: {fileID: 4491000097333041710, guid: 4d762fbf487b49f45879f46e1794ab0d,
     type: 3}
+  m_CurrentLevel: 1
   m_maxBlockPossible: 50
 --- !u!4 &489646026
 Transform:

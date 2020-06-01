@@ -15,6 +15,11 @@ public class LevelLogic : Singleton<LevelLogic>
 
     public Action OnDestionationReached;
 
+    private void Awake()
+    {
+        // TODO : Pas sur de ça non plus
+    }
+
     /// <summary>
     /// Called on destination reach.
     /// </summary>

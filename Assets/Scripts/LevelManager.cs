@@ -101,6 +101,7 @@ public class LevelManager : Singleton<LevelManager>
     /// <summary>
     /// Current level ID.
     /// </summary>
+    [SerializeField]
     private int m_CurrentLevel = 0;
 
     /// <summary>
@@ -146,8 +147,12 @@ public class LevelManager : Singleton<LevelManager>
         }
 
         GenerateLevelFromFile(Application.streamingAssetsPath + $"/Levels/level_{m_CurrentLevel}/level_{m_CurrentLevel}_blocks.ini");
-        m_beginningBlackhole = Instantiate(m_blackholePrefab, m_spawnPosition + new Vector3(0.5f, 0.5f), Quaternion.identity);
-        m_beginningBlackhole.GetComponent<BlackHoleManager>().BeginLevel(true);
+
+        if (m_CurrentLevel > 0)
+        {
+            m_beginningBlackhole = Instantiate(m_blackholePrefab, m_spawnPosition + new Vector3(0.5f, 0.5f), Quaternion.identity);
+            m_beginningBlackhole.GetComponent<BlackHoleManager>().BeginLevel(true);
+        }
     }
 
     /// <summary>
@@ -422,7 +427,6 @@ public class LevelManager : Singleton<LevelManager>
                     case TilesType.SPAWN:
                         PlayerManager.Instance.transform.position = new Vector2(currentCell.x + 0.5f, currentCell.y + 0.5f);
 
-                        // TODO : play spawn animation on new level load.
                         break;
 
                     case TilesType.DESTINATION:
@@ -705,7 +709,6 @@ public class LevelManager : Singleton<LevelManager>
                             PlayerManager.Instance.Respawn();
                         }
 
-                        // TODO : play spawn animation on new level load.
                         break;
 
                     case TilesType.DESTINATION:
@@ -728,5 +731,10 @@ public class LevelManager : Singleton<LevelManager>
     public GameObject GetBeginningBlackhole()
     {
         return m_beginningBlackhole;
+    }
+
+    public void GoToNextLevel()
+    {
+        m_CurrentLevel++;
     }
 }

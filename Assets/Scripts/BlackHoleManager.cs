@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BlackHoleManager : MonoBehaviour
 {
@@ -23,7 +24,15 @@ public class BlackHoleManager : MonoBehaviour
     {
         if (!m_beginLevel)
         {
-            // Load new level
+            // TODO : Load new level
+            LevelManager.Instance.GoToNextLevel();
+            int nextLevel = SceneManager.GetActiveScene().buildIndex + 1;
+            if (nextLevel >= SceneManager.sceneCountInBuildSettings)
+            {
+                Application.OpenURL("https://cayugatribune.wixsite.com/welcometotheinternet");
+            }
+            else
+                SceneManager.LoadScene(nextLevel);
         }
         Destroy(gameObject);
     }
