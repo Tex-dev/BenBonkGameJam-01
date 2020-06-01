@@ -605,6 +605,12 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &1404005912 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1820103294262450486, guid: 538662fb8adcd384186c13cb751244b3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1820103295777444676}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1544173002
 GameObject:
   m_ObjectHideFlags: 0
@@ -1235,6 +1241,16 @@ PrefabInstance:
       objectReference: {fileID: 119551276}
     - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
         type: 3}
+      propertyPath: OnAnimationEnd.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
+      propertyPath: OnAnimationStart.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
       propertyPath: OnAnimationStart.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1907799663}
@@ -1242,7 +1258,47 @@ PrefabInstance:
         type: 3}
       propertyPath: OnAnimationEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
+      objectReference: {fileID: 1404005912}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
+      propertyPath: OnAnimationEnd.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetActive
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
+      propertyPath: OnAnimationEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
+      propertyPath: OnAnimationEnd.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
+      propertyPath: OnAnimationStart.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
+      propertyPath: OnAnimationStart.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
+      propertyPath: OnAnimationStart.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
       objectReference: {fileID: 907815685}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
+      propertyPath: OnAnimationStart.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: Play
+      objectReference: {fileID: 0}
+    - target: {fileID: 1820103295442409940, guid: 538662fb8adcd384186c13cb751244b3,
+        type: 3}
+      propertyPath: OnAnimationStart.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1820103295537774862, guid: 538662fb8adcd384186c13cb751244b3,
         type: 3}
       propertyPath: OnAnimationStart.m_PersistentCalls.m_Calls.Array.data[0].m_Target
