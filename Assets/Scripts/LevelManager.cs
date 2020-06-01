@@ -213,6 +213,7 @@ public class LevelManager : Singleton<LevelManager>
     public void GenerateLevelFromFile(string levelFilePath, string levelFilePathPlayer = "", bool resetOnlyBlocks = false, bool forceRespawn = false)
     {
         int width = 0, height = 0;
+        int playerWidth = 0, playerHeight = 0;
         string[] fileLinesOther;
         string[] fileLinesBlock;
 
@@ -226,7 +227,30 @@ public class LevelManager : Singleton<LevelManager>
         // 1°) Extraction des informations du fichier de config
         //////////////////////////////////////////////////////////////
         ReadInformationsFromFile(levelFilePath, ref width, ref height, out fileLinesOther);
-        ReadInformationsFromFile(levelFilePathPlayer, ref width, ref height, out fileLinesBlock);
+        ReadInformationsFromFile(levelFilePathPlayer, ref playerWidth, ref playerHeight, out fileLinesBlock);
+
+        // Bourrage papier
+        if (playerHeight > height)
+        {
+            List<string> lines = new List<string>(fileLinesOther);
+
+            for (int i = 0; i < playerHeight - height; i++)
+            {
+                lines.Add("\n");
+            }
+            fileLinesOther = lines.ToArray();
+            height = playerHeight;
+        }
+        if (height > playerHeight)
+        {
+            List<string> lines = new List<string>(fileLinesBlock);
+
+            for (int i = 0; i < height - playerHeight; i++)
+            {
+                lines.Add("\n");
+            }
+            fileLinesBlock = lines.ToArray();
+        }
 
         // 2°) Chargement du niveau à partir du fichier
         //////////////////////////////////////////////////////////////
