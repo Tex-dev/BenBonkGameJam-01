@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4156863, g: 0.93725497, b: 0.9921569, a: 1}
+  m_Color: {r: 0.8196079, g: 0.6666667, b: 0.03137255, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -225,7 +225,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Hooooooooo ...
+  m_Text: if things where done properly, you shouldn't be able to see those debug
+    features.
 --- !u!114 &5330858237104698986
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -507,7 +508,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "I'm N\xB0 Eight...\nDon't you think this place sucks?\r"
+  m_Text: you mean the "file", "folder" and "reset" buttons?
 --- !u!114 &5330858237340621305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -582,7 +583,7 @@ GameObject:
   - component: {fileID: 5330858237465006539}
   - component: {fileID: 5330858237465006538}
   m_Layer: 5
-  m_Name: Dialog
+  m_Name: Dialog_file_edition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -761,9 +762,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'My devs suck,
-
-    everything is always glitching !'
+  m_Text: they didn't bother finishing this level implementation, it seems...
 --- !u!114 &5330858237653818948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -886,7 +885,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4156863, g: 0.93725497, b: 0.9921569, a: 1}
+  m_Color: {r: 0.8196079, g: 0.6666667, b: 0.03137255, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -905,7 +904,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: We can't trust them !
+  m_Text: indeed... time to show you how to exploit the breach !
 --- !u!114 &5330858237820734040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1073,8 +1072,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: But don't you know there is a better place where everything is possible
-    ?
+  m_Text: '"file" allows you to open the current level file, and edit it.'
 --- !u!114 &5330858237844414252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1642,7 +1640,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Pffffff, i'm bored.
+  m_Text: 'oh no ! i can''t jump this far...
+
+    the devs, again, showed how much
+    we can trust them'
 --- !u!114 &5330858238503037375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1905,7 +1906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8196079, g: 0.6666667, b: 0.03137255, a: 1}
+  m_Color: {r: 0.4156863, g: 0.93725497, b: 0.9921569, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1924,7 +1925,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Hello there ! I'm N\xB0 One."
+  m_Text: finally :D
 --- !u!114 &5330858238706012906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2065,7 +2066,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Sure yes ...
+  m_Text: indeed !
 --- !u!114 &5330858238766499781
 MonoBehaviour:
   m_ObjectHideFlags: 0
