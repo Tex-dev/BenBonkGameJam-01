@@ -50,8 +50,6 @@ public class AudioManager : Singleton<AudioManager>
     /// </summary>
     private void Awake()
     {
-        //DontDestroyOnLoad(this);
-
         // Play the main loop once the intros are done.
         m_ThemeLoop.PlayDelayed(m_Intro.clip.length);
         m_ThemeLoopPaused.PlayDelayed(m_Intro.clip.length);
