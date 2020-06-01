@@ -24,6 +24,12 @@ public class TutorialManager : MonoBehaviour
     [SerializeField]
     private Button[] m_button;
 
+    [SerializeField]
+    private GameObject[] m_dialog;
+
+    [SerializeField]
+    private int m_dialogID = 0;
+
     private void Awake()
     {
         PlayerManager.Instance.DisableMovement();   
@@ -49,13 +55,23 @@ public class TutorialManager : MonoBehaviour
         m_canvas.SetActive(true);
     }
 
+    public void TutoNext()
+    {
+        PlayerManager.Instance.EnableMovement();
+        m_one.GetComponent<TutoNoOne>().GoToNextPoint();
+        print("c'est reparti");
+
+    }
+
     public void TutoElement_00()
     {
 
     }
 
-    public void TutoElement_01()
+    public void TutoElement()
     {
         PlayerManager.Instance.DisableMovement();
+        m_dialog[m_dialogID].SetActive(true);
+        m_dialogID++;
     }
 }

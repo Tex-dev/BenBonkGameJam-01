@@ -17,7 +17,10 @@ public class TutorialElement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        m_tutoManager.CallFunction(name);
-    }
+        if (!(collision is CapsuleCollider2D) || !collision.CompareTag("Player"))
+            return;
 
+        m_tutoManager.CallFunction(name);
+        Destroy(gameObject);
+    }
 }

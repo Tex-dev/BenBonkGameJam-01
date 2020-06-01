@@ -30,6 +30,7 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField]
     private LayerMask m_collisionLayer = ~0;
 
+    [SerializeField]
     private Rigidbody2D m_rigidBody = null;
 
     private SpriteRenderer m_spriteRenderer = null;
