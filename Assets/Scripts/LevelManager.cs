@@ -78,7 +78,6 @@ public class LevelManager : Singleton<LevelManager>
     /// </summary>
     public static int CurrentLevel => Instance.m_CurrentLevel;
 
-
     /// <summary>
     /// Current level ID.
     /// </summary>
@@ -93,12 +92,14 @@ public class LevelManager : Singleton<LevelManager>
     /// Number max of block can be in the level
     /// </summary>
     private int m_maxBlockPossible;
+
     public int MaxBlockPossible { get => m_maxBlockPossible; private set => m_maxBlockPossible = value; }
 
     /// <summary>
     /// Number of block used in the level
     /// </summary>
     private int m_nbBlockUsed;
+
     public int NbBlockUsed { get => m_nbBlockUsed; private set => m_nbBlockUsed = value; }
 
     /// <summary>
