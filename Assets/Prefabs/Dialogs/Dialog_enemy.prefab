@@ -936,13 +936,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 320579b443068b84aae8d7ac6b839be1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TypingMode: 0
+  m_TypingMode: 1
   m_WritingSpeed: 0.1
   m_DisableWhenDone: 1
   m_DeleteBehaviour: 0
   m_DeleteQuantity: 0
   m_DelayBeforeDeletion: 0
-  m_TimeBeforeDisable: 1
+  m_TimeBeforeDisable: 5
   m_StartOffset: 0
   m_EndOffset: 0
   OnAnimationStart:
