@@ -64,12 +64,6 @@ public class LevelManager : Singleton<LevelManager>
     private Tilemap m_unphysicTilemap = null;
 
     /// <summary>
-    /// GameObject to display on pause.
-    /// </summary>
-    [SerializeField]
-    private GameObject m_PauseMenu = null;
-
-    /// <summary>
     /// Prefab for the enemy.
     /// </summary>
     [SerializeField]
@@ -199,7 +193,7 @@ public class LevelManager : Singleton<LevelManager>
     /// <param name="focus">Status of the focus. ON = true, OFF = false.</param>
     private void OnApplicationFocus(bool focus)
     {
-        m_PauseMenu.SetActive(!focus);
+        FakeOS.Instance.TogglePauseMenu(!focus);
 
         if (focus)
         {

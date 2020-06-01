@@ -8,6 +8,12 @@ using UnityEngine;
 public class FakeOS : Singleton<FakeOS>
 {
     /// <summary>
+    /// Pause menu game object.
+    /// </summary>
+    [SerializeField]
+    private GameObject m_PauseMenu = null;
+
+    /// <summary>
     /// Process of the current file viewer.
     /// </summary>
     private System.Diagnostics.Process m_CurrentFileViewProcess = null;
@@ -36,6 +42,42 @@ public class FakeOS : Singleton<FakeOS>
         {
             ResetFile();
         }
+
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            TogglePauseMenu(!PlayerManager.Instance.IsPaused);
+        }
+    }
+
+    /// <summary>
+    /// Toggle the pause menu.
+    /// </summary>
+    /// <param name="display">Should the pause menu be displayed?</param>
+    public void TogglePauseMenu(bool display)
+    {
+        m_PauseMenu.SetActive(display);
+
+        if (!display)
+            PlayerManager.Play();
+        else
+            PlayerManager.Pause();
+    }
+
+    /// <summary>
+    /// Called when the quit button is pressed.
+    /// </summary>
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    /// <summary>
+    /// Called when volume slider is moved.
+    /// </summary>
+    /// <param name="volume">new volume value.</param>
+    public void OnVolumeChange(float volume)
+    {
+        AudioManager.Instance.ChangeVolumeMax(volume);
     }
 
     /// <summary>

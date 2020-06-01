@@ -42,8 +42,7 @@ public class AudioManager : Singleton<AudioManager>
     /// <summary>
     /// Range of the volume. X is min, Y is max.
     /// </summary>
-    [SerializeField]
-    private Vector2 m_VolumeRange = new Vector2(0.03f, 1f);
+    private Vector2 m_VolumeRange = new Vector2(0f, 0.69f);
 
     /// <summary>
     /// Awake is called by Unity at initialization.
@@ -72,6 +71,18 @@ public class AudioManager : Singleton<AudioManager>
     {
         PlayerManager.Instance.OnPause += PauseCallback;
         PlayerManager.Instance.OnPlay += PlayCallback;
+    }
+
+    /// <summary>
+    /// Changes the game max volume.
+    /// </summary>
+    /// <param name="volume">New game max volume.</param>
+    public void ChangeVolumeMax(float volume)
+    {
+        m_IntroPaused.volume = volume;
+        m_ThemeLoopPaused.volume = volume;
+
+        m_VolumeRange = new Vector2(m_VolumeRange.x, volume);
     }
 
     /// <summary>
