@@ -23,7 +23,7 @@ public class BlockStockViewer : MonoBehaviour
     /// </summary>
     private void Update()
     {
-        m_BlockDisplay.text = LevelManager.Instance.NbBlockUsed.ToString("00") + " / " + LevelManager.Instance.MaxBlockPossible.ToString("99");
+        m_BlockDisplay.text = LevelManager.Instance.NbBlockUsed.ToString("00") + " / " + LevelManager.Instance.MaxBlockPossible.ToString("00");
 
         if (LevelManager.Instance.NbBlockUsed > LevelManager.Instance.MaxBlockPossible)
         {
