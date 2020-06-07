@@ -536,7 +536,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b14e98a2b56529345a28b97861ab46e4, type: 2}
   m_physicTilemap: {fileID: 873931279}
   m_unphysicTilemap: {fileID: 962864737}
-  m_PauseMenu: {fileID: 1432813238}
   m_EnemyPrefab: {fileID: 4097435655201817450, guid: 50fc94a9488545642971c165d594c21b,
     type: 3}
   m_FlagPrefab: {fileID: 7660962759773516705, guid: 9df840e168cbfa24188dd4d07ecb2496,
@@ -544,7 +543,7 @@ MonoBehaviour:
   m_blackholePrefab: {fileID: 4491000097333041710, guid: 4d762fbf487b49f45879f46e1794ab0d,
     type: 3}
   m_CurrentLevel: 1
-  m_maxBlockPossible: 50
+  m_maxBlockPossible: 25
 --- !u!4 &489646026
 Transform:
   m_ObjectHideFlags: 0
@@ -31406,12 +31405,6 @@ AudioSource:
     type: 3}
   m_PrefabInstance: {fileID: 2035386333}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1432813238 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 363369601197383939, guid: 0027ce346b363684cab20edbb35494ac,
-    type: 3}
-  m_PrefabInstance: {fileID: 317222437}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1608719560 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 537273408543813362, guid: 8e4c2f2d17fc35e40afa482d31748ed9,
@@ -31447,6 +31440,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf9ec76239173784397757605ee5625f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_eightAnim: []
+  m_player: {fileID: 0}
+  m_one: {fileID: 0}
+  m_onePos: []
+  m_canvas: {fileID: 0}
+  m_button: []
+  m_dialog: []
+  m_dialogID: 0
 --- !u!4 &1660966091
 Transform:
   m_ObjectHideFlags: 0

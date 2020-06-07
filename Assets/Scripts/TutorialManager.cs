@@ -32,7 +32,7 @@ public class TutorialManager : MonoBehaviour
 
     private void Awake()
     {
-        PlayerManager.Instance.DisableMovement();   
+        PlayerManager.Instance.DisableMovement();
     }
 
     public void CallFunction(string name)
@@ -52,7 +52,7 @@ public class TutorialManager : MonoBehaviour
     {
         m_player.GetComponentInChildren<Animator>().runtimeAnimatorController = m_eightAnim[1];
         PlayerManager.Instance.EnableMovement();
-        m_canvas.SetActive(true);
+        m_canvas.GetComponent<Canvas>().enabled = true;
     }
 
     public void TutoNext()
@@ -60,12 +60,10 @@ public class TutorialManager : MonoBehaviour
         PlayerManager.Instance.EnableMovement();
         m_one.GetComponent<TutoNoOne>().GoToNextPoint();
         print("c'est reparti");
-
     }
 
     public void TutoElement_00()
     {
-
     }
 
     public void TutoElement()

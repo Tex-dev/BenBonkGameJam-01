@@ -42,7 +42,7 @@ public class AudioManager : Singleton<AudioManager>
     /// <summary>
     /// Range of the volume. X is min, Y is max.
     /// </summary>
-    private Vector2 m_VolumeRange = new Vector2(0f, 0.69f);
+    private Vector2 m_VolumeRange = new Vector2(0f, 0.4f);
 
     /// <summary>
     /// Awake is called by Unity at initialization.
