@@ -167,10 +167,13 @@ public class PlayerManager : Singleton<PlayerManager>
             Flip(m_rigidBody.velocity.x);
         }
 
-        m_animator.SetFloat("speed", Mathf.Abs(m_rigidBody.velocity.x));
-        m_animator.SetFloat("verticalSpeed", m_rigidBody.velocity.y);
-        m_animator.SetBool("isGrounded", m_isGrounded);
-        m_animator.SetBool("isJumping", m_isJumping);
+        if (m_animator != null && m_animator.runtimeAnimatorController != null)
+        {
+            m_animator.SetFloat("speed", Mathf.Abs(m_rigidBody.velocity.x));
+            m_animator.SetFloat("verticalSpeed", m_rigidBody.velocity.y);
+            m_animator.SetBool("isGrounded", m_isGrounded);
+            m_animator.SetBool("isJumping", m_isJumping);
+        }
     }
 
     /// <summary>
@@ -219,7 +222,9 @@ public class PlayerManager : Singleton<PlayerManager>
     private void Death()
     {
         Source.PlayOneShot(OnDeath);
-        m_animator.SetBool("isDead", true);
+
+        if (m_animator != null && m_animator.runtimeAnimatorController != null)
+            m_animator.SetBool("isDead", true);
 
         Collider2D[] colliders = GetComponents<Collider2D>();
         foreach (Collider2D collider in colliders)
@@ -246,7 +251,9 @@ public class PlayerManager : Singleton<PlayerManager>
     public void Respawn()
     {
         GetComponent<PlayerHealth>().Respawn();
-        m_animator.SetBool("isDead", false);
+
+        if (m_animator != null && m_animator.runtimeAnimatorController != null)
+            m_animator.SetBool("isDead", false);
 
         Collider2D[] colliders = GetComponents<Collider2D>();
         foreach (Collider2D collider in colliders)
@@ -270,15 +277,19 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         m_canMove = true;
 
-        m_rigidBody.gravityScale = 1;
+        if (m_rigidBody != null)
+            m_rigidBody.gravityScale = 1;
     }
 
     public void DisableMovement()
     {
         m_canMove = false;
 
-        m_rigidBody.velocity = Vector2.zero;
-        m_rigidBody.gravityScale = 0;
+        if (m_rigidBody != null)
+        {
+            m_rigidBody.velocity = Vector2.zero;
+            m_rigidBody.gravityScale = 0;
+        }
     }
 
     public void PlayerAnimation(bool isEndAnim)
