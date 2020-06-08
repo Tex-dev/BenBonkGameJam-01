@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ public class TextTypingAnimator : MonoBehaviour
         LINE
     }
 
+    #region Animation parameters
+
     [Header("Animation parameters")]
 
     /// <summary>
@@ -29,12 +32,6 @@ public class TextTypingAnimator : MonoBehaviour
     /// </summary>
     [SerializeField]
     private float m_WritingSpeed = 0.25f;
-
-    /// <summary>
-    /// Should the text be disable when animation is done?
-    /// </summary>
-    [SerializeField]
-    private bool m_DisableWhenDone = false;
 
     /// <summary>
     /// Should the text delete itself when done?
@@ -55,10 +52,46 @@ public class TextTypingAnimator : MonoBehaviour
     private float m_DelayBeforeDeletion = 0f;
 
     /// <summary>
+    /// Should wait for an user interaction to end the dialog box?
+    /// </summary>
+    [SerializeField]
+    private bool m_WaitForUserInteractionToEnd = false;
+
+    /// <summary>
+    /// Should the text be disable when animation is done?
+    /// </summary>
+    [SerializeField]
+    private bool m_DisableWhenDone = false;
+
+    /// <summary>
     /// Time before the text disappears for the next text.
     /// </summary>
     [SerializeField]
     private float m_TimeBeforeDisable = 0.0f;
+
+    /// <summary>
+    /// Should the typing animation be aborted?
+    /// </summary>
+    private bool m_AbortAnimation = false;
+
+    /// <summary>
+    /// Can the dialog be ended right now?
+    /// </summary>
+    private bool m_CanEndDialog = false;
+
+    /// <summary>
+    /// Should the dialog be aborted?
+    /// </summary>
+    private bool m_EndDialog = false;
+
+    /// <summary>
+    /// Speed at wich the text is displayed.
+    /// </summary>
+    private float m_ReadingSpeed = 0f;
+
+    #endregion Animation parameters
+
+    #region Timing
 
     [Header("Timing")]
     /// <summary>
@@ -84,6 +117,10 @@ public class TextTypingAnimator : MonoBehaviour
     /// </summary>
     [SerializeField]
     private UnityEvent OnAnimationEnd = null;
+
+    #endregion Timing
+
+    #region Audio features
 
     [Header("Audio features")]
     /// <summary>
@@ -134,6 +171,8 @@ public class TextTypingAnimator : MonoBehaviour
     [SerializeField]
     private AudioSource m_NarratorAudioSource = null;
 
+    #endregion Audio features
+
     /// <summary>
     /// Text UI element.
     /// </summary>
@@ -163,6 +202,81 @@ public class TextTypingAnimator : MonoBehaviour
         m_ContentLines = System.Text.RegularExpressions.Regex.Split(m_Text.text, "\r\n|\r|\n");
 
         m_Text.text = "";
+
+#if UNITY_EDITOR
+        if (m_TypingSFXEnabled && (m_TypingAudioSource == null || m_TypingSFX == null || m_CarriageReturnSFX == null || m_TypingSpacebarSFX == null))
+        {
+            if (EditorUtility.DisplayDialog("Missing elements", "You enabled typing SFX, but haven't settled its component.\n " +
+                "Please check you have filled all of them in.", "Ok"))
+            {
+                m_TypingSFXEnabled = false;
+
+                Debug.Break();
+                // TODO : make this work...
+                //Selection.SetActiveObjectWithContext(gameObject, null);
+            }
+        }
+
+        if (m_AudioNarratorEnabled && (m_NarratorClip == null || m_NarratorAudioSource == null))
+        {
+            if (EditorUtility.DisplayDialog("Missing elements", "You enabled audio narrator, but haven't settled its component.\n " +
+                "Please check you have filled all of them in.", "Ok"))
+            {
+                m_AudioNarratorEnabled = false;
+
+                Debug.Break();
+                // TODO : make this work...
+                //Selection.SetActiveObjectWithContext(gameObject, null);
+            }
+        }
+#endif
+    }
+
+    /// <summary>
+    /// Update is called once per frame by Unity.
+    /// </summary>
+    private void Update()
+    {
+        if (Input.anyKeyDown)
+        {
+            if (m_CanEndDialog)
+            {
+                EndDialog();
+            }
+            else
+            {
+                AbortAnimation();
+                m_CanEndDialog = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Call this to cut the dialog animation to the end.
+    /// </summary>
+    public void AbortAnimation()
+    {
+        m_AbortAnimation = true;
+
+        CoroutineManager.Delay(AbortBehaviour, m_ReadingSpeed);
+    }
+
+    /// <summary>
+    /// Skip the animation.
+    /// </summary>
+    private void AbortBehaviour()
+    {
+        m_Text.text = m_Content;
+        m_AbortAnimation = false;
+    }
+
+    /// <summary>
+    /// Call this to force end the dialog and trigger its end events.
+    /// </summary>
+    public void EndDialog()
+    {
+        m_DeleteBehaviour = false;
+        m_WaitForUserInteractionToEnd = false;
     }
 
     /// <summary>
@@ -186,22 +300,20 @@ public class TextTypingAnimator : MonoBehaviour
 
         int lineIndex = -1;
 
-        float narratorSpeed;
-
         if (m_AudioNarratorEnabled)
         {
-            narratorSpeed = (m_NarratorClip.length - m_EndOffset) / m_Content.Length;
+            m_ReadingSpeed = (m_NarratorClip.length - m_EndOffset) / m_Content.Length;
 
             m_NarratorAudioSource.PlayOneShot(m_NarratorClip);
         }
         else
         {
-            narratorSpeed = m_WritingSpeed;
+            m_ReadingSpeed = m_WritingSpeed;
         }
 
         if (m_TypingMode == TypingMode.CHARACTER)
         {
-            while (m_Text.text.Length < m_Content.Length)
+            while (!m_AbortAnimation && m_Text.text.Length < m_Content.Length)
             {
                 m_Text.text += m_Content[++index];
 
@@ -218,21 +330,28 @@ public class TextTypingAnimator : MonoBehaviour
                 }
 
                 if (m_Content[index] != '\n' && m_Content[index] != '\r')
-                    yield return new WaitForSeconds(narratorSpeed);
+                    yield return new WaitForSeconds(m_ReadingSpeed);
             }
         }
         else
         {
-            while (lineIndex < m_ContentLines.Length - 1)
+            while (!m_AbortAnimation && lineIndex < m_ContentLines.Length - 1)
             {
                 lineIndex++;
 
                 m_Text.text += m_ContentLines[lineIndex] + "\n";
 
                 if (m_ContentLines[lineIndex] != "")
-                    yield return new WaitForSeconds(narratorSpeed);
+                    yield return new WaitForSeconds(m_ReadingSpeed);
             }
         }
+
+        while (m_AbortAnimation)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        m_CanEndDialog = true;
 
         if (m_TypingSFXEnabled)
             m_TypingAudioSource.PlayOneShot(m_CarriageReturnSFX);
@@ -245,7 +364,7 @@ public class TextTypingAnimator : MonoBehaviour
 
             int length = m_Text.text.Length;
 
-            while (m_Text.text.Length > length - m_DeleteQuantity)
+            while (m_DeleteBehaviour && m_Text.text.Length > length - m_DeleteQuantity)
             {
                 m_Content = m_Text.text;
                 m_Text.text = m_Text.text.Remove(m_Text.text.Length - 1);
@@ -256,12 +375,17 @@ public class TextTypingAnimator : MonoBehaviour
                 }
 
                 if (m_Content[index] != '\n' && m_Content[index] != '\r')
-                    yield return new WaitForSeconds(narratorSpeed);
+                    yield return new WaitForSeconds(m_ReadingSpeed);
 
                 index--;
                 if (index < 0)
                     break;
             }
+        }
+
+        while (m_WaitForUserInteractionToEnd)
+        {
+            yield return new WaitForEndOfFrame();
         }
 
         if (m_DisableWhenDone)
@@ -278,6 +402,7 @@ public class TextTypingAnimator : MonoBehaviour
             }
 
             OnAnimationEnd?.Invoke();
+
             gameObject.SetActive(false);
         }
         else

@@ -5,19 +5,7 @@ using UnityEngine;
 public class TutoPlayer : MonoBehaviour
 {
     [SerializeField]
-    private TutorialManager m_tutoManager;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private TutorialManager m_tutoManager = null;
 
     public void EndStandUp()
     {

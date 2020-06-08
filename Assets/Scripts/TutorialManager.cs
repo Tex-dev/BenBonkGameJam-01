@@ -7,25 +7,19 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     [SerializeField]
-    private RuntimeAnimatorController[] m_eightAnim;
+    private RuntimeAnimatorController[] m_eightAnim = null;
 
     [SerializeField]
-    private GameObject m_player;
+    private GameObject m_player = null;
 
     [SerializeField]
-    private GameObject m_one;
+    private GameObject m_one = null;
 
     [SerializeField]
-    private Transform[] m_onePos;
+    private GameObject m_canvas = null;
 
     [SerializeField]
-    private GameObject m_canvas;
-
-    [SerializeField]
-    private Button[] m_button;
-
-    [SerializeField]
-    private GameObject[] m_dialog;
+    private GameObject[] m_dialog = null;
 
     [SerializeField]
     private int m_dialogID = 0;

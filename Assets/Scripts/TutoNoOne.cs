@@ -5,10 +5,10 @@ using UnityEngine;
 public class TutoNoOne : MonoBehaviour
 {
     [SerializeField]
-    Transform[] m_waypoints;
+    Transform[] m_waypoints = null;
 
     [SerializeField]
-    float m_speed;
+    float m_speed = 0f;
 
     int m_currentWaypoint = 0;
 
