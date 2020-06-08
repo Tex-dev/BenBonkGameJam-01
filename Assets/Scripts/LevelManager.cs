@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Data;
-using UnityEngine.UIElements;
 
 internal enum TilesID : ushort
 {
@@ -231,28 +229,37 @@ public class LevelManager : Singleton<LevelManager>
         ReadInformationsFromFile(levelFilePath, ref width, ref height, out fileLinesOther);
         ReadInformationsFromFile(levelFilePathPlayer, ref playerWidth, ref playerHeight, out fileLinesBlock);
 
-        // Bourrage papier
+        // 1°)bis Harmonisation des fichiers
         if (playerHeight > height)
         {
             List<string> lines = new List<string>(fileLinesOther);
 
             for (int i = 0; i < playerHeight - height; i++)
-            {
-                lines.Add("\n");
-            }
+                lines.Add("");
+
             fileLinesOther = lines.ToArray();
             height = playerHeight;
         }
-        if (height > playerHeight)
+        else
         {
             List<string> lines = new List<string>(fileLinesBlock);
 
             for (int i = 0; i < height - playerHeight; i++)
-            {
                 lines.Add("\n");
-            }
+            
             fileLinesBlock = lines.ToArray();
         }
+
+        width = Mathf.Max(width, playerWidth);
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width - fileLinesOther[i].Length; j++)
+                fileLinesOther[i] += " ";
+
+            for (int j = 0; j < width - fileLinesBlock[i].Length; j++)
+                fileLinesBlock[i] += " ";
+        }
+
 
         // 2°) Chargement du niveau à partir du fichier
         //////////////////////////////////////////////////////////////
@@ -266,6 +273,12 @@ public class LevelManager : Singleton<LevelManager>
         // 3°) Affichage des tuiles à l'écran
         //////////////////////////////////////////////////////////////
         DrawLevel(width, height, map, levelTiles, resetOnlyBlocks, forceRespawn);
+
+        // 4°) Mise à jour du fichier player (on replace les blocks non déplaçable)
+        //     /!\ S'il s'agit bien du fichier player /!\
+        //////////////////////////////////////////////////////////////
+        if(levelFilePathPlayer != levelFilePath)
+            UpdatePlayerFile(levelFilePathPlayer, width, height, map);
     }
 
     /// <summary>
@@ -489,7 +502,10 @@ public class LevelManager : Singleton<LevelManager>
         for (currentCell.x = 0; currentCell.x < 50; currentCell.x++)
         {
             for (currentCell.y = 0; currentCell.y < 200; currentCell.y++)
+            {
                 m_physicTilemap.SetTile(currentCell, null);
+                m_unphysicTilemap.SetTile(currentCell, null);
+            }
         }
 
         // Boucle permettant l'affichage des tuiles.
@@ -567,6 +583,36 @@ public class LevelManager : Singleton<LevelManager>
                 }
             }
         }
+    }
+
+    private void UpdatePlayerFile(string filePath, int width, int height, TilesType[,] map)
+    {
+        StreamWriter writer;
+
+        writer = new StreamWriter(filePath);
+        for (int j = height-1; j >= 0; j--)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                switch(map[i,j])
+                {
+                    case TilesType.BLOCK:
+                    case TilesType.TRAPPED_BLOCK:
+                        writer.Write("*");
+                        break;
+
+                    case TilesType.UNMOVEABLE_BLOCK:
+                        writer.Write("+");
+                        break;
+
+                    default:
+                        writer.Write(" ");
+                        break;
+                }
+            }
+            writer.WriteLine();
+        }
+        writer.Close();
     }
 
     public GameObject GetBeginningBlackhole()
